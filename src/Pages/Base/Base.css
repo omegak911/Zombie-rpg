@@ -1,0 +1,13 @@
+#homebase {
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+.homebase {
+  background-image: url('../../assets/maps/Base.png');
+  height: 750px;
+  width: 1300px;
+  background-repeat: no-repeat;  
+  position: relative;
+}
