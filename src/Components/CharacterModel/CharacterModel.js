@@ -25,25 +25,10 @@ class CharacterModel extends Component {
   }
 
   componentDidMount() {
-    const { autoScroll, characterType } = this.props;
+    const { characterType } = this.props;
     
     if (characterType === 'player') {
-      window.addEventListener('keydown', (e) => {
-        let { throttle } = this.state;
-        let direction = e.key;
-        let currentDate = Date.now()
-        let throttler = currentDate - throttle > 100;
-        if (throttler && this.checkDirectionValidity(direction)) {
-          this.handleDirectionChange(direction, currentDate);
-          autoScroll();
-          let { startX, startY, top, left } = this.state;
-          // console.log(startX, startY, top, left);
-          console.log('X: ', startX);
-          console.log('Y: ', startY);
-          console.log('top: ', top);
-          console.log('left: ', left);
-        }
-      })
+      window.addEventListener('keydown', this.handleKeyPress)
     } else {
       let { startX, startY, top, left } = this.props.startCoord;
       this.setState({ startX, startY, top, left });
@@ -57,6 +42,13 @@ class CharacterModel extends Component {
           this.handleDirectionChange(direction);
         }
       }, 2000);
+    }
+  }
+
+  componentWillUnmount() {
+    const { characterType } = this.props;
+    if (characterType === 'player') {
+      window.removeEventListener('keydown', this.handleKeyPress);
     }
   }
 
@@ -108,6 +100,18 @@ class CharacterModel extends Component {
       this.setState({ [topLeft]: calculations[direction], throttle: currentDate })
     } else {
       this.setState({ [topLeft]: calculations[direction] })
+    }
+  }
+
+  handleKeyPress = (e) => {
+    const { autoScroll } = this.props;
+    let { throttle } = this.state;
+    let direction = e.key;
+    let currentDate = Date.now()
+    let throttler = currentDate - throttle > 100;
+    if (throttler && this.checkDirectionValidity(direction)) {
+      this.handleDirectionChange(direction, currentDate);
+      autoScroll();
     }
   }
 
