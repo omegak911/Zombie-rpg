@@ -7,7 +7,20 @@ const characterConfigs = {
   },
   npc: {
     backgroundImage: npcImage,
+  },
+}
+
+const movementConfigs = {
+  horizontal: 36,
+  vertical: 40,
+}
+
+const mapConfigs = {
+  height: 750,
+  width: 1300,
+  startPositionAdjustment: {
+    midUpperCenter: 80,
   }
 }
 
-export default characterConfigs;
+export { characterConfigs, mapConfigs, movementConfigs };

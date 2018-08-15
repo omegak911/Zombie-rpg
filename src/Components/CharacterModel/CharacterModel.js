@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import characterConfigs from '../../config';
+import { characterConfigs, movementConfigs } from '../../config';
 import './CharacterModel.css';
 
 class CharacterModel extends Component {
@@ -9,24 +9,27 @@ class CharacterModel extends Component {
     this.state = {
       top: 275,
       left: 610,
-      startX: 6,
-      startY: 8,
+      startX: 17,
+      startY: 7,
       playerSprites: ['0px -80px','0px -120px','0px -40px','0px 0px'],
       npcSprites: ['0px 0px','-120px 0px','-80px 0px','-40px 0px'],
       directionIndex: 0,
+      throttle: Date.now(),
     }
   }
 
   componentDidMount() {
-    const { characterType } = this.props;
-
+    const { autoScroll, characterType } = this.props;
+    
     if (characterType === 'player') {
       window.addEventListener('keydown', (e) => {
+        let { throttle } = this.state;
         let direction = e.key;
-  
-        if (this.checkDirectionValidity(direction)) {
-          this.handleDirectionChange(direction);
-          console.log(this.state);
+        let currentDate = Date.now()
+        let throttler = currentDate - throttle > 100;
+        if (throttler && this.checkDirectionValidity(direction)) {
+          this.handleDirectionChange(direction, currentDate);
+          autoScroll();
         }
       })
     }
@@ -35,11 +38,14 @@ class CharacterModel extends Component {
       this.setState({ startX: 12, startY: 15, top: 275, left: 650 });
 
       window.addEventListener('keydown', (e) => {
+        let { throttle } = this.state;
         let randomIndex = Math.floor(Math.random() * 4);
         let direction = this.state.npcSprites[randomIndex];
+        let currentDate = Date.now()
+        let throttler = currentDate - throttle > 1000;
 
-        if (this.checkDirectionValidity(direction)) {
-          this.handleDirectionChange(direction);
+        if (throttler && this.checkDirectionValidity(direction)) {
+          this.handleDirectionChange(direction, currentDate);
         }
       })
     }
@@ -48,45 +54,48 @@ class CharacterModel extends Component {
   checkDirectionValidity = (direction) => {
     const { baseMatrix } = this.props;
     const [ x, y, directionIndex ] = this.directionConverter(direction);
-
-    if (x >= 0 && y >= 0 && x < baseMatrix.length && y < baseMatrix[0].length && baseMatrix[x][y] === 1) {
-      this.setState({ startX: x, startY: y, directionIndex })
+    if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length && baseMatrix[y][x] === 1) {
+      this.setState({ startX: x, startY: y, directionIndex, throttle: true })
       return true;
     } else {
       return false;
     }
-
   }
 
   directionConverter = (direction) => {
     let { startX, startY } = this.state;
     let newDirectionIndex = 0;
+
     if (direction === 'ArrowUp') {
-      startX -= 1;
+      startY -= 1;
       newDirectionIndex = 2;
     } else if (direction === 'ArrowDown') {
-      startX += 1;
+      startY += 1;
       newDirectionIndex = 0;
     } else if (direction === 'ArrowLeft') {
-      startY -= 1;
+      startX -= 1;
       newDirectionIndex = 3;
     } else if (direction === 'ArrowRight') {
-      startY += 1;
+      startX += 1;
       newDirectionIndex = 1;
     }
     return [startX, startY, newDirectionIndex];
   }
 
-  handleDirectionChange = (direction) => {
-    if (direction === 'ArrowUp') {
-      this.setState({ top: this.state.top - 40 })
-    } else if (direction === 'ArrowDown') {
-      this.setState({ top: this.state.top + 40 })
-    } else if (direction === 'ArrowLeft') {
-      this.setState({ left: this.state.left - 40 })
-    } else if (direction === 'ArrowRight') {
-      this.setState({ left: this.state.left + 40 })
+  handleDirectionChange = (direction, currentDate) => {
+    const calculations = {
+      ArrowUp: this.state.top - movementConfigs.vertical,
+      ArrowDown: this.state.top + movementConfigs.vertical,
+      ArrowLeft: this.state.left - movementConfigs.horizontal,
+      ArrowRight: this.state.left + movementConfigs.horizontal
     }
+
+    let topLeft = 'top';
+    if (direction === 'ArrowLeft' || direction === 'ArrowRight') {
+      topLeft = 'left';
+    }
+
+    this.setState({ [topLeft]: calculations[direction], throttle: currentDate })
   }
 
   render() {
@@ -94,7 +103,7 @@ class CharacterModel extends Component {
     let { top, left, playerSprites, npcSprites, directionIndex} = this.state;
     let sprites = characterType === 'player' ? playerSprites : npcSprites;
     return (
-      <div id="characterModel" className={characterType}
+      <div id="characterModel" className={characterType} autoFocus={true}
         style={{ 
           backgroundImage: `url(${characterConfigs[characterType].backgroundImage})`,
           backgroundPosition: `${sprites[directionIndex]}`,
