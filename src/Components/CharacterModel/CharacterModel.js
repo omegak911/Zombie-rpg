@@ -11,8 +11,14 @@ class CharacterModel extends Component {
       left: 610,
       startX: 17,
       startY: 7,
-      playerSprites: ['0px -80px','0px -120px','0px -40px','0px 0px'],
-      npcSprites: ['0px 0px','-120px 0px','-80px 0px','-40px 0px'],
+      playerSprites: characterConfigs.player.spriteCrop,
+      npcSprites: {
+        npcMan: characterConfigs.npcMan.spriteCrop,
+        npcWoman: characterConfigs.npcWoman.spriteCrop,
+        npcGirl: characterConfigs.npcGirl.spriteCrop,
+        npcBoy: characterConfigs.npcBoy.spriteCrop,
+      },
+      directions: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'],
       directionIndex: 0,
       throttle: Date.now(),
     }
@@ -30,24 +36,27 @@ class CharacterModel extends Component {
         if (throttler && this.checkDirectionValidity(direction)) {
           this.handleDirectionChange(direction, currentDate);
           autoScroll();
+          let { startX, startY, top, left } = this.state;
+          // console.log(startX, startY, top, left);
+          console.log('X: ', startX);
+          console.log('Y: ', startY);
+          console.log('top: ', top);
+          console.log('left: ', left);
         }
       })
-    }
+    } else {
+      let { startX, startY, top, left } = this.props.startCoord;
+      this.setState({ startX, startY, top, left });
 
-    if (characterType === 'npc') {
-      this.setState({ startX: 12, startY: 15, top: 275, left: 650 });
-
-      window.addEventListener('keydown', (e) => {
-        let { throttle } = this.state;
+      setInterval(() => {
+        let { directions } = this.state;
         let randomIndex = Math.floor(Math.random() * 4);
-        let direction = this.state.npcSprites[randomIndex];
-        let currentDate = Date.now()
-        let throttler = currentDate - throttle > 1000;
+        let direction = directions[randomIndex];
 
-        if (throttler && this.checkDirectionValidity(direction)) {
-          this.handleDirectionChange(direction, currentDate);
+        if (this.checkDirectionValidity(direction)) {
+          this.handleDirectionChange(direction);
         }
-      })
+      }, 2000);
     }
   }
 
@@ -95,15 +104,20 @@ class CharacterModel extends Component {
       topLeft = 'left';
     }
 
-    this.setState({ [topLeft]: calculations[direction], throttle: currentDate })
+    if (currentDate) {
+      this.setState({ [topLeft]: calculations[direction], throttle: currentDate })
+    } else {
+      this.setState({ [topLeft]: calculations[direction] })
+    }
   }
 
   render() {
     let { characterType } = this.props;
     let { top, left, playerSprites, npcSprites, directionIndex} = this.state;
-    let sprites = characterType === 'player' ? playerSprites : npcSprites;
+    let sprites = characterType === 'player' ? playerSprites : npcSprites[characterType];
+    let classN = characterType === 'player' ? 'player' : 'npc';
     return (
-      <div id="characterModel" className={characterType} autoFocus={true}
+      <div id="characterModel" className={classN} autoFocus={true}
         style={{ 
           backgroundImage: `url(${characterConfigs[characterType].backgroundImage})`,
           backgroundPosition: `${sprites[directionIndex]}`,

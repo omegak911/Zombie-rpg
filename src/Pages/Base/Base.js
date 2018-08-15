@@ -76,7 +76,10 @@ class Base extends Component {
       <div id="homebase" className="page">
         <div className="homebase">
           <CharacterModel autoScroll={this.autoScroll} baseMatrix={baseMatrix} characterType="player"/>
-          <CharacterModel baseMatrix={baseMatrix} characterType="npc"/>
+          <CharacterModel baseMatrix={baseMatrix} characterType="npcMan" startCoord={{ startX: 18, startY: 7, top: 275, left: 650 }}/>
+          <CharacterModel baseMatrix={baseMatrix} characterType="npcWoman" startCoord={{ startX: 6, startY: 6, top: 235, left: 214 }}/>
+          <CharacterModel baseMatrix={baseMatrix} characterType="npcGirl" startCoord={{ startX: 29, startY: 10, top: 395, left: 1042 }}/>
+          <CharacterModel baseMatrix={baseMatrix} characterType="npcBoy" startCoord={{ startX: 29, startY: 6, top: 235, left: 1042 }}/>
         </div>
       </div>
     )
