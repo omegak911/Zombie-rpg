@@ -34,8 +34,8 @@ const movementConfigs = {
 }
 
 const mapConfigs = {
-  height: 750,
-  width: 1300,
+  height: 680,
+  width: 1680,
   startPositionAdjustment: {
     midUpperCenter: 80,
   }

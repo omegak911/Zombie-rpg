@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import CharacterModel from '../../Components/CharacterModel/CharacterModel';
-import { mapConfigs, movementConfigs } from '../../config';
+import { characterConfigs, mapConfigs, movementConfigs } from '../../config';
 import './Base.css';
 
 class Base extends Component {
@@ -58,17 +58,16 @@ class Base extends Component {
 
   centerInitialViewOnPlayer = () => {
     const homebase = document.getElementById('homebase');
-    let mapMidpointX = Math.floor(mapConfigs.width/2);
-    let mapMidpointY = Math.floor(mapConfigs.height/2);
     let viewMidpointX = Math.floor(homebase.clientWidth/2);
     let viewMidpointY = Math.floor(homebase.clientHeight/2);
+    let { startTop, startLeft } = characterConfigs.player;
 
     homebase.style.visibility = 'hidden';
-    homebase.scrollLeft = mapMidpointX - viewMidpointX;
+    homebase.scrollLeft = startLeft - viewMidpointX + 20;  
     setTimeout(() => {
-      homebase.scrollTop = mapMidpointY - viewMidpointY - mapConfigs.startPositionAdjustment.midUpperCenter;
+      homebase.scrollTop = startTop - viewMidpointY + 20;
       homebase.style.visibility = 'visible';
-    }, 500);
+    }, 1000);
   }
 
   render() {
