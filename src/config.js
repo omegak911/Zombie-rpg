@@ -5,6 +5,10 @@ const characterConfigs = {
   player: {
     backgroundImage: playerImage,
     spriteCrop: ['0px -80px','0px -120px','0px -40px','0px 0px'],
+    startTop: 400,
+    startLeft: 800,
+    startRow: 10,
+    startColumn: 20,
   },
   npcMan: {
     backgroundImage: npcImage,
@@ -25,7 +29,7 @@ const characterConfigs = {
 }
 
 const movementConfigs = {
-  horizontal: 30,
+  horizontal: 40,
   vertical: 40,
 }
 

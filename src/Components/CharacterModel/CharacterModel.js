@@ -7,10 +7,10 @@ class CharacterModel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      top: 275,
-      left: 613,
-      startX: 15,
-      startY: 6,
+      top: characterConfigs.player.startTop,
+      left: characterConfigs.player.startLeft,
+      startX: characterConfigs.player.startColumn,
+      startY: characterConfigs.player.startRow,
       playerSprites: characterConfigs.player.spriteCrop,
       npcSprites: {
         npcMan: characterConfigs.npcMan.spriteCrop,
@@ -114,7 +114,7 @@ class CharacterModel extends Component {
     }
 
     let { startX, startY, top, left } = this.state; 
-    console.log(startX, startY, top, left)
+    console.log(`column: ${startX}`, `row: ${startY}`, `top: ${top}`, `left: ${left}`)
   }
 
   render() {
