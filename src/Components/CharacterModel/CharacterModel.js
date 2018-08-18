@@ -8,9 +8,9 @@ class CharacterModel extends Component {
     super(props);
     this.state = {
       top: 275,
-      left: 610,
-      startX: 17,
-      startY: 7,
+      left: 613,
+      startX: 15,
+      startY: 6,
       playerSprites: characterConfigs.player.spriteCrop,
       npcSprites: {
         npcMan: characterConfigs.npcMan.spriteCrop,
@@ -28,7 +28,7 @@ class CharacterModel extends Component {
     const { characterType } = this.props;
     
     if (characterType === 'player') {
-      window.addEventListener('keydown', this.handleKeyPress)
+      window.addEventListener('keydown', this.handleKeyPress);
     } else {
       let { startX, startY, top, left } = this.props.startCoord;
       this.setState({ startX, startY, top, left });
@@ -56,7 +56,7 @@ class CharacterModel extends Component {
     const { baseMatrix } = this.props;
     const [ x, y, directionIndex ] = this.directionConverter(direction);
     if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length && baseMatrix[y][x] === 1) {
-      this.setState({ startX: x, startY: y, directionIndex, throttle: true })
+      this.setState({ startX: x, startY: y, directionIndex, throttle: true });
       return true;
     } else {
       return false;
@@ -95,11 +95,10 @@ class CharacterModel extends Component {
     if (direction === 'ArrowLeft' || direction === 'ArrowRight') {
       topLeft = 'left';
     }
-
     if (currentDate) {
-      this.setState({ [topLeft]: calculations[direction], throttle: currentDate })
+      this.setState({ [topLeft]: calculations[direction], throttle: currentDate });
     } else {
-      this.setState({ [topLeft]: calculations[direction] })
+      this.setState({ [topLeft]: calculations[direction] });
     }
   }
 
@@ -113,6 +112,9 @@ class CharacterModel extends Component {
       this.handleDirectionChange(direction, currentDate);
       autoScroll();
     }
+
+    let { startX, startY, top, left } = this.state; 
+    console.log(startX, startY, top, left)
   }
 
   render() {

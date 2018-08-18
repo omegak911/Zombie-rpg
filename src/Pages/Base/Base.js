@@ -50,7 +50,7 @@ class Base extends Component {
     if (offsetLeft - scrollLeft < 300) { //move left
       homebase.scrollLeft -= movementConfigs.horizontal;
     }
-    if (offsetTop - scrollTop < 160) { //move up
+    if (offsetTop - scrollTop < 150) { //move up
       homebase.scrollTop -= movementConfigs.vertical;
     }
   }

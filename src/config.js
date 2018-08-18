@@ -25,7 +25,7 @@ const characterConfigs = {
 }
 
 const movementConfigs = {
-  horizontal: 36,
+  horizontal: 30,
   vertical: 40,
 }
 
