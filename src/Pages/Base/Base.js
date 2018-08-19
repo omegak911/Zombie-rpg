@@ -41,18 +41,22 @@ class Base extends Component {
     const homebase = document.getElementById('homebase');
     const player = document.getElementsByClassName('player')[0];
     let { offsetLeft, offsetTop } = player;
-    let { scrollLeft, scrollTop } = homebase;
-    if (offsetLeft - scrollLeft > 340) { //move right
-      homebase.scrollLeft += movementConfigs.horizontal;
+    let { clientWidth, clientHeight, scrollLeft, scrollTop } = homebase;    
+    let playerIs = {
+      tooCloseToTop: offsetTop < (scrollTop + (clientHeight * .4)),
+      tooCloseToBottom: offsetTop + 40 > (scrollTop + clientHeight - (clientHeight * .4)),
+      tooCloseToLeft: offsetLeft < (scrollLeft + (clientWidth * .4)),
+      tooCloseToRight: offsetLeft + 40 > (scrollLeft + clientWidth - (clientWidth * .4)),
     }
-    if (offsetTop - scrollTop > 195) { //move down
-      homebase.scrollTop += movementConfigs.vertical;
-    }
-    if (offsetLeft - scrollLeft < 300) { //move left
-      homebase.scrollLeft -= movementConfigs.horizontal;
-    }
-    if (offsetTop - scrollTop < 150) { //move up
+
+    if (playerIs.tooCloseToTop) {
       homebase.scrollTop -= movementConfigs.vertical;
+    } else if (playerIs.tooCloseToBottom) {
+      homebase.scrollTop += movementConfigs.vertical;
+    } else if (playerIs.tooCloseToLeft) {
+      homebase.scrollLeft -= movementConfigs.horizontal;
+    } else if (playerIs.tooCloseToRight) {
+      homebase.scrollLeft += movementConfigs.horizontal;
     }
   }
 
