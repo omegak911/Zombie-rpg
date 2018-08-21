@@ -1,0 +1,19 @@
+#menu {
+  height: 40px;
+  width: 80px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.menu {
+  background-image: url('../../assets/icons/Menu.png');
+  height: 20px;
+  background-repeat: no-repeat;
+  width: 100%;
+}
+
+.menuList {
+  background-color: black;
+  color: white;
+}
