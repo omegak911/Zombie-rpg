@@ -12,6 +12,7 @@ class CharacterModel extends Component {
       startX: characterConfigs.player.startColumn,
       startY: characterConfigs.player.startRow,
       playerSprites: characterConfigs.player.spriteCrop,
+      playerFacingDirection: [characterConfigs.player.startRow + 1, characterConfigs.player.startColumn],
       npcSprites: {
         npcMan: characterConfigs.npcMan.spriteCrop,
         npcWoman: characterConfigs.npcWoman.spriteCrop,
@@ -54,9 +55,9 @@ class CharacterModel extends Component {
 
   checkDirectionValidity = (direction) => {
     const { baseMatrix } = this.props;
-    const [ x, y, directionIndex ] = this.directionConverter(direction);
+    const [ x, y, directionIndex, facingCoord ] = this.directionConverter(direction);
     if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length && baseMatrix[y][x] === 1) {
-      this.setState({ startX: x, startY: y, directionIndex, throttle: true });
+      this.setState({ startX: x, startY: y, directionIndex, throttle: true, playerFacingDirection: facingCoord });
       return true;
     } else {
       return false;
@@ -66,21 +67,27 @@ class CharacterModel extends Component {
   directionConverter = (direction) => {
     let { startX, startY } = this.state;
     let newDirectionIndex = 0;
+    let facingX = startX;
+    let facingY = startY;
 
     if (direction === 'ArrowUp') {
       startY -= 1;
       newDirectionIndex = 2;
+      facingY = startY - 1;
     } else if (direction === 'ArrowDown') {
       startY += 1;
       newDirectionIndex = 0;
+      facingY = startY + 1;
     } else if (direction === 'ArrowLeft') {
       startX -= 1;
       newDirectionIndex = 3;
+      facingX = startX - 1;
     } else if (direction === 'ArrowRight') {
       startX += 1;
       newDirectionIndex = 1;
+      facingX = startX + 1;
     }
-    return [startX, startY, newDirectionIndex];
+    return [startX, startY, newDirectionIndex, [facingX, facingY]];
   }
 
   handleDirectionChange = (direction, currentDate) => {
@@ -102,19 +109,37 @@ class CharacterModel extends Component {
     }
   }
 
+  isPlayerFacingSign = () => {
+    let { baseMatrix } = this.props;
+    let { playerFacingDirection } = this.state;
+    console.log(playerFacingDirection)
+    return baseMatrix[playerFacingDirection[1]][playerFacingDirection[0]] === 'sign';
+  }
+
   handleKeyPress = (e) => {
     const { autoScroll } = this.props;
     let { throttle } = this.state;
-    let direction = e.key;
+    let value = e.key;
     let currentDate = Date.now()
     let throttler = currentDate - throttle > 100;
-    if (throttler && this.checkDirectionValidity(direction)) {
-      this.handleDirectionChange(direction, currentDate);
+    let isDirection = {
+      'ArrowUp': true,
+      'ArrowDown': true,
+      'ArrowLeft': true,
+      'ArrowRight': true,
+    }
+
+    if (value === 'a') {
+      if (this.isPlayerFacingSign()) {
+        console.log('pressed a on sign');
+      }
+    } else if (isDirection[value] && throttler && this.checkDirectionValidity(value)) {
+      this.handleDirectionChange(value, currentDate);
       autoScroll();
     }
 
-    let { startX, startY, top, left } = this.state; 
-    console.log(`column: ${startX}`, `row: ${startY}`, `top: ${top}`, `left: ${left}`)
+    // let { startX, startY, top, left } = this.state; 
+    // console.log(`column: ${startX}`, `row: ${startY}`, `top: ${top}`, `left: ${left}`)
   }
 
   render() {

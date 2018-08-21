@@ -17,7 +17,7 @@ class Base extends Component {
     let { signCoordinates } = homeBaseConfigs;
     let temp = await mapConfigs.matrix.slice();
     for (let i = 0; i < signCoordinates.length; i++) {
-      temp[signCoordinates[i][0]][signCoordinates[i][1]] = await 0;
+      temp[signCoordinates[i][0]][signCoordinates[i][1]] = await 'sign';
     }
     await this.setState({ baseMatrix: temp });
     await this.centerInitialViewOnPlayer();
