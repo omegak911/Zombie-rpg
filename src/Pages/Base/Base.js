@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Menu from '../../Components/Menu/Menu';
 import CharacterModel from '../../Components/CharacterModel/CharacterModel';
+import { Context } from '../../Provider';
 import { characterConfigs, homeBaseConfigs, mapConfigs, movementConfigs } from '../../config';
 import './Base.css';
 
@@ -84,7 +85,14 @@ class Base extends Component {
             backgroundImage: `url(${homeBaseConfigs.backgroundImage})`,
           }}
           >
-          <Menu menuCoord={menuCoord}/>
+          <Context.Consumer>
+            {(provider) =>
+              <Menu 
+                menuCoord={menuCoord} 
+                saveGame={provider.saveGame}
+                />
+            }
+          </Context.Consumer>
           <CharacterModel autoScroll={this.autoScroll} baseMatrix={baseMatrix} characterType="player"/>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcMan" startCoord={{ startX: 21, startY: 10, top: 400, left: 840 }}/>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcWoman" startCoord={{ startX: 28, startY: 7, top: 280, left: 1120 }}/>

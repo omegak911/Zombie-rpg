@@ -6,13 +6,22 @@ class Menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      menuItems: ['stats','equip','items','save','options','exit'],
+      menuItems: ['stats','equip','items'],
       showMenuItems: false,
     }
   }
 
   menuClickHandler = () => {
     this.setState({ showMenuItems: !this.state.showMenuItems })
+  }
+
+  option = () => {
+    console.log('option up options')
+  }
+
+  saveGame = () => {
+    console.log('save game')
+    this.props.saveGame();
   }
 
   render() {
@@ -26,10 +35,13 @@ class Menu extends Component {
         onClick={this.menuClickHandler}>
         <div className="menu">
           {showMenuItems &&
-            <ul class="menuList">
-              {menuItems.map(item =>
-                <li>{item}</li>
+            <ul className="menuList">
+              {menuItems.map((item,i) =>
+                <li key={i}>{item}</li>
               )}
+              <li onClick={this.saveGame}>save</li>
+              <li onClick={this.option}>option</li>              
+              <li onClick={this.menuClickHandler}>exit</li>
             </ul>
           }
         </div>
