@@ -25,7 +25,7 @@ class Provider extends Component {
       },
       totalPlaytime: '0h0m',
       zombiesKilled: 0,
-
+      menuCoord: [0,0],
     }
   }
 
@@ -37,9 +37,12 @@ class Provider extends Component {
   saveGame = () => {
     //in react native, we will use asyncStorage
 
-
     //let's use localStorage for webVersion for now.  We can also use an actual DB if needed
     localStorage.setItem('playerData', JSON.stringify(this.state));
+  }
+
+  updateMenuCoord = (menuCoord) => {
+    this.setState({ menuCoord });
   }
 
   render() {
@@ -48,6 +51,7 @@ class Provider extends Component {
         value={{
           state: this.state,
           saveGame: this.saveGame,
+          updateMenuCoord: this.updateMenuCoord
           //we can write functions here to update state
           //if we need the function to be used inside another function on the component
           //we can pass it down as a prop one level up

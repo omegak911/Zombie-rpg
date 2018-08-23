@@ -14,17 +14,11 @@ class Base extends Component {
       //get entire screen height and width
       //get inner screen height and width
       //get inner screen position within the screen - it's height/width 80%
-      menuCoord: [0,0]
     }
   }
 
   async componentDidMount() {
-    // console.dir(window)
-    // console.log(window.innerHeight);
-    // console.log(window.innerWidth);
-
-    let { innerHeight, innerWidth } = window;
-    console.log(innerHeight * .8);
+    console.log(this.props)
     const { clientWidth, offsetTop, offsetLeft } = document.getElementById('homebase');
     let menuLeft = offsetLeft + clientWidth - 80;
     //configurations to baseMatrix here based on existing buildings/signs
@@ -33,7 +27,8 @@ class Base extends Component {
     for (let i = 0; i < signCoordinates.length; i++) {
       temp[signCoordinates[i][0]][signCoordinates[i][1]] = await 'sign';
     }
-    await this.setState({ baseMatrix: temp, menuCoord: [offsetTop, menuLeft] });
+    await this.props.updateMenuCoord([offsetTop, menuLeft])
+    await this.setState({ baseMatrix: temp });
     await this.centerInitialViewOnPlayer();
   }
 
@@ -85,14 +80,14 @@ class Base extends Component {
             backgroundImage: `url(${homeBaseConfigs.backgroundImage})`,
           }}
           >
-          <Context.Consumer>
+          {/* <Context.Consumer>
             {(provider) =>
               <Menu 
                 menuCoord={menuCoord} 
                 saveGame={provider.saveGame}
                 />
             }
-          </Context.Consumer>
+          </Context.Consumer> */}
           <CharacterModel autoScroll={this.autoScroll} baseMatrix={baseMatrix} characterType="player"/>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcMan" startCoord={{ startX: 21, startY: 10, top: 400, left: 840 }}/>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcWoman" startCoord={{ startX: 28, startY: 7, top: 280, left: 1120 }}/>

@@ -20,6 +20,15 @@
   color: white;
   list-style: none;
   padding: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.menuList:before {
+  opacity: 0;
+}
+
+.menuList:after {
+  opacity: 1;
 }
 
 .menuList li {

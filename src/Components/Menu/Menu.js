@@ -1,29 +1,42 @@
 import React, { Component } from 'react';
-
 import './Menu.css';
 
 class Menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      menuItems: ['stats','equip','items'],
       showMenuItems: false,
     }
   }
 
+  handlePropagation = (e) => {
+    e.stopPropagation();
+  }
+
+  
   menuClickHandler = () => {
-    this.setState({ showMenuItems: !this.state.showMenuItems })
+    this.setState({ showMenuItems: !this.state.showMenuItems });
   }
-
+  
   option = (e) => {
-    e.stopPropagation();
-    console.log('option up options')
+    console.log('option up options');
   }
-
+  
   saveGame = (e) => {
-    e.stopPropagation();
     console.log('save game');
     this.props.saveGame();
+  }
+  
+  showEquipment = () => {
+    console.log('show equipment');
+  }
+
+  showItems = () => {
+    console.log('show items');
+  }
+
+  showStats = () => {
+    console.log('show stats');
   }
 
   render() {
@@ -37,10 +50,10 @@ class Menu extends Component {
         onClick={this.menuClickHandler}>
         <div className="menu">
           {showMenuItems &&
-            <ul className="menuList">
-              {menuItems.map((item,i) =>
-                <li key={i}>{item}</li>
-              )}
+            <ul className="menuList" onClick={this.handlePropagation}>
+              <li onClick={this.showStats}>stats</li>
+              <li onClick={this.showEquipment}>equip</li>
+              <li onClick={this.showItems}>items</li>
               <li onClick={this.saveGame}>save</li>
               <li onClick={this.option}>option</li>              
               <li onClick={this.menuClickHandler}>exit</li>
