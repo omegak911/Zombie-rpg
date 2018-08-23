@@ -1,3 +1,26 @@
 #inventory {
-  
+  background-color: white;
+  border: 5px solid grey;
+  max-height: 210px;
+  max-width: 210px;
+  overflow: scroll;
+  position: fixed;
+  width: 50%;
+  z-index: 1000;
+}
+
+.inventoryCoinDisplay {
+  height: 20px;
+  width: 100%;
+}
+
+.inventoryBoxContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.inventoryBoxItem {
+  border: 1px solid black;
+  height: 40px;
+  width: 40px;
 }

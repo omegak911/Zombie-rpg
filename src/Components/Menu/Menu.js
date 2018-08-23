@@ -12,7 +12,6 @@ class Menu extends Component {
   handlePropagation = (e) => {
     e.stopPropagation();
   }
-
   
   menuClickHandler = () => {
     this.setState({ showMenuItems: !this.state.showMenuItems });
@@ -22,17 +21,8 @@ class Menu extends Component {
     console.log('option up options');
   }
   
-  saveGame = (e) => {
-    console.log('save game');
-    this.props.saveGame();
-  }
-  
   showEquipment = () => {
     console.log('show equipment');
-  }
-
-  showItems = () => {
-    console.log('show items');
   }
 
   showStats = () => {
@@ -40,7 +30,7 @@ class Menu extends Component {
   }
 
   render() {
-    let { menuItems, showMenuItems } = this.state;
+    let { showMenuItems } = this.state;
     let { menuCoord } = this.props;
     return (
       <div 
@@ -53,8 +43,8 @@ class Menu extends Component {
             <ul className="menuList" onClick={this.handlePropagation}>
               <li onClick={this.showStats}>stats</li>
               <li onClick={this.showEquipment}>equip</li>
-              <li onClick={this.showItems}>items</li>
-              <li onClick={this.saveGame}>save</li>
+              <li onClick={this.props.showInventory}>items</li>
+              <li onClick={this.props.saveGame}>save</li>
               <li onClick={this.option}>option</li>              
               <li onClick={this.menuClickHandler}>exit</li>
             </ul>

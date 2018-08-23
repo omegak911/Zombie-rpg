@@ -18,3 +18,7 @@ body {
 .flexColumn {
   flex-direction: column;
 }
+
+.hide {
+  display: none;
+}

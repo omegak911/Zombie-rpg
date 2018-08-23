@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import LevelOne from './Pages/Explore/LevelOne';
+import Inventory from './Components/Modals/Inventory/Inventory';
 import Menu from './Components/Menu/Menu';
 import { Context, Provider } from './Provider';
 import Base from './Pages/Base/Base';
@@ -18,9 +19,11 @@ class App extends Component {
                 <Menu 
                   menuCoord={provider.state.menuCoord} 
                   saveGame={provider.saveGame}
+                  showInventory={provider.showInventory}
                   />
               }
             </Context.Consumer>
+            <Inventory />
             <Switch>
               <Context.Consumer>
               {(provider) =>
