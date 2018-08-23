@@ -15,12 +15,14 @@ class Menu extends Component {
     this.setState({ showMenuItems: !this.state.showMenuItems })
   }
 
-  option = () => {
+  option = (e) => {
+    e.stopPropagation();
     console.log('option up options')
   }
 
-  saveGame = () => {
-    console.log('save game')
+  saveGame = (e) => {
+    e.stopPropagation();
+    console.log('save game');
     this.props.saveGame();
   }
 
