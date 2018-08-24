@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
 
-import { characterConfigs, movementConfigs } from '../../config';
+import configs from '../../configs/config';
 import './CharacterModel.css';
+
+const { player } = configs.characterConfigs;
 
 class CharacterModel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      top: characterConfigs.player.startTop,
-      left: characterConfigs.player.startLeft,
-      startX: characterConfigs.player.startColumn,
-      startY: characterConfigs.player.startRow,
-      playerSprites: characterConfigs.player.spriteCrop,
-      playerFacingDirection: [characterConfigs.player.startRow + 1, characterConfigs.player.startColumn],
+      top: player.startTop,
+      left: player.startLeft,
+      startX: player.startColumn,
+      startY: player.startRow,
+      playerSprites: player.spriteCrop,
+      playerFacingDirection: [player.startRow + 1, player.startColumn],
       npcSprites: {
-        npcMan: characterConfigs.npcMan.spriteCrop,
-        npcWoman: characterConfigs.npcWoman.spriteCrop,
-        npcGirl: characterConfigs.npcGirl.spriteCrop,
-        npcBoy: characterConfigs.npcBoy.spriteCrop,
+        npcMan: configs.characterConfigs.npcMan.spriteCrop,
+        npcWoman: configs.characterConfigs.npcWoman.spriteCrop,
+        npcGirl: configs.characterConfigs.npcGirl.spriteCrop,
+        npcBoy: configs.characterConfigs.npcBoy.spriteCrop,
       },
       directions: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'],
       directionIndex: 0,
@@ -92,10 +94,10 @@ class CharacterModel extends Component {
 
   handleDirectionChange = (direction, currentDate) => {
     const calculations = {
-      ArrowUp: this.state.top - movementConfigs.vertical,
-      ArrowDown: this.state.top + movementConfigs.vertical,
-      ArrowLeft: this.state.left - movementConfigs.horizontal,
-      ArrowRight: this.state.left + movementConfigs.horizontal
+      ArrowUp: this.state.top - configs.movementConfigs.vertical,
+      ArrowDown: this.state.top + configs.movementConfigs.vertical,
+      ArrowLeft: this.state.left - configs.movementConfigs.horizontal,
+      ArrowRight: this.state.left + configs.movementConfigs.horizontal
     }
 
     let topLeft = 'top';
@@ -113,7 +115,7 @@ class CharacterModel extends Component {
     let { baseMatrix } = this.props;
     let { playerFacingDirection } = this.state;
     console.log(playerFacingDirection)
-    return baseMatrix[playerFacingDirection[1]][playerFacingDirection[0]] === 'sign';
+    return baseMatrix[playerFacingDirection[1]][playerFacingDirection[0]];
   }
 
   handleKeyPress = (e) => {
@@ -130,7 +132,11 @@ class CharacterModel extends Component {
     }
 
     if (value === 'a') {
-      if (this.isPlayerFacingSign()) {
+      let signType = this.isPlayerFacingSign();
+      if (signType === 'playerBaseSign') {
+        console.log('pressed playerBaseSign');
+      }
+      if (signType === 'sign') {
         console.log('pressed a on sign');
       }
     } else if (isDirection[value] && throttler && this.checkDirectionValidity(value)) {
@@ -150,7 +156,7 @@ class CharacterModel extends Component {
     return (
       <div id="characterModel" className={classN} autoFocus={true}
         style={{ 
-          backgroundImage: `url(${characterConfigs[characterType].backgroundImage})`,
+          backgroundImage: `url(${configs.characterConfigs[characterType].backgroundImage})`,
           backgroundPosition: `${sprites[directionIndex]}`,
           top: `${top}px`, 
           left: `${left}px` }}>
