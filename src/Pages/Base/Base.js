@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 
 import CharacterModel from '../../Components/CharacterModel/CharacterModel';
-import { characterConfigs, homeBaseConfigs, mapConfigs, movementConfigs } from '../../config';
+import { Context } from '../../Provider';
+import configs from '../../configs/config';
 import './Base.css';
+
+const { characterConfigs, homeBaseConfigs, mapConfigs, movementConfigs } = configs;
 
 class Base extends Component {
   constructor(props) {
@@ -22,7 +25,11 @@ class Base extends Component {
     let { signCoordinates } = homeBaseConfigs;
     let temp = await mapConfigs.matrix.slice();
     for (let i = 0; i < signCoordinates.length; i++) {
-      temp[signCoordinates[i][0]][signCoordinates[i][1]] = await 'sign';
+      if (signCoordinates[i][0] === 10 && signCoordinates[i][1] === 19) {
+        temp[signCoordinates[i][0]][signCoordinates[i][1]] = await 'playerBaseSign';
+      } else {
+        temp[signCoordinates[i][0]][signCoordinates[i][1]] = await 'sign';
+      }
     }
     await this.props.updateMenuCoord([offsetTop, menuLeft])
     await this.setState({ baseMatrix: temp });
@@ -77,7 +84,16 @@ class Base extends Component {
             backgroundImage: `url(${homeBaseConfigs.backgroundImage})`,
           }}
           >
-          <CharacterModel autoScroll={this.autoScroll} baseMatrix={baseMatrix} characterType="player"/>
+          <Context.Consumer>
+          {(provider) =>
+            <CharacterModel 
+              autoScroll={this.autoScroll} 
+              baseMatrix={baseMatrix} 
+              characterType="player"
+              handleSignClick={provider.handleSignClick}  
+              />
+          }
+          </Context.Consumer>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcMan" startCoord={{ startX: 21, startY: 10, top: 400, left: 840 }}/>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcWoman" startCoord={{ startX: 28, startY: 7, top: 280, left: 1120 }}/>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcGirl" startCoord={{ startX: 11, startY: 4, top: 160, left: 440 }}/>

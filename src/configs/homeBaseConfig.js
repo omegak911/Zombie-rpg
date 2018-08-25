@@ -3,7 +3,7 @@ import backgroundImage from '../assets/maps/Base4.png';
 const homeBaseConfigs = {
   signCoordinates: [[2,26],[3,9],[3,13],[6,28],[6,32],[9,5],[10,19],[12,3],[12,31]],
   backgroundImage: backgroundImage,
-  playerBase: {
+  home: {
     1: {
       cost: 100,
       image: '',

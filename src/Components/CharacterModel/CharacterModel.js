@@ -134,7 +134,7 @@ class CharacterModel extends Component {
     if (value === 'a') {
       let signType = this.isPlayerFacingSign();
       if (signType === 'playerBaseSign') {
-        console.log('pressed playerBaseSign');
+        this.props.handleSignClick();
       }
       if (signType === 'sign') {
         console.log('pressed a on sign');

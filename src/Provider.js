@@ -7,8 +7,11 @@ class Provider extends Component {
     super(props);
     this.state = {
       player: {
-        baseProgress: 'some sort of way to track what buildings, maybe coordinates along with numerical equivalent of the level of the buildings',
-        coin: 0,
+        //'some sort of way to track what buildings, maybe coordinates along with numerical equivalent of the level of the buildings',
+        baseProgress: {
+
+        },
+        coin: 100,
         defense: 5,
         dmg: 1,
         equipment: {
@@ -17,7 +20,7 @@ class Provider extends Component {
         exp: 0,
         hp: 30,
         inventory: {
-          size: [1,1,1,1,1],
+          size: ['','','','',''],
           //items go here along with quantity
           //limit to 5, increase with bigger bags in 5s, up to 30
         },
@@ -31,12 +34,27 @@ class Provider extends Component {
       },
       menuCoord: [0,0],
       showInventory: false,
+      currentSign: null,
     }
   }
 
   componentDidMount() {
     let playerData = JSON.parse(localStorage.getItem('playerData'));
     console.log(playerData);
+  }
+
+  handlePurchaseOption = (e) => {
+    e.preventDefault();
+    let { value } = e.target;
+    console.log('handlePurchaseOption val: ', value);
+    this.setState({ currentSign: null })
+  }
+
+  handleSignClick = () => {
+    console.log('pressed playerBaseSign');
+    this.setState({ currentSign: 'home' });
+    //make sure to change it back to null on completion
+    //we'll need to configure this to work with merchants, armory, etc
   }
 
   saveGame = () => {
@@ -61,6 +79,8 @@ class Provider extends Component {
           saveGame: this.saveGame,
           updateMenuCoord: this.updateMenuCoord,
           showInventory: this.showInventory,
+          handleSignClick: this.handleSignClick,
+          handlePurchaseOption: this.handlePurchaseOption,
           //we can write functions here to update state
           //if we need the function to be used inside another function on the component
           //we can pass it down as a prop one level up
