@@ -1,10 +1,22 @@
-#inventory {
+#purchase {
   background-color: white;
   border: 5px solid grey;
   max-height: 210px;
   max-width: 210px;
   overflow: scroll;
-  position: fixed;
+  padding: 10px;
   width: 50%;
   z-index: 1000;
+}
+
+.purchaseText {
+  white-space: pre;
+}
+
+.veilOfDarkness {
+  background-color: rgba(170,170,170,0.5);
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  z-index: 1001;
 }

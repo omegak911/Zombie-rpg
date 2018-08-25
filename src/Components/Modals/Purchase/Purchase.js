@@ -17,17 +17,27 @@ class Purchase extends Component {
             let { currentSign } = provider.state;
             let { baseProgress } = provider.state.player;
             let { homeBaseConfigs } = configs;
-            currentSign ?
-            <div className="veilOfDarkness">
+            return currentSign ?
+            <div className="veilOfDarkness flexCenter">
               <div id="purchase">
                 {baseProgress[currentSign] ?
-                `Upgrade to level ${baseProgress[currentSign].level + 1}? \n
-                $${homeBaseConfigs[currentSign][baseProgress[currentSign].level + 1].cost}
-                `
+                  <div className="purchaseText">
+                    <p>
+                      Upgrade to level {baseProgress[currentSign].level + 1}?
+                    </p>
+                    <p>
+                      ${homeBaseConfigs.buildings[currentSign][baseProgress[currentSign].level + 1].cost}
+                    </p>
+                  </div>
                 :
-                `Purchase ${currentSign}?\n
-                $${homeBaseConfigs[currentSign][1].cost}
-                `
+                <div>
+                  <p>
+                    Purchase {currentSign}?
+                  </p>
+                  <p>
+                    ${homeBaseConfigs.buildings[currentSign][1].cost}
+                  </p>
+                </div>
                 }
                 <div>
                 <button value="1" onClick={provider.handlePurchaseOption}>Yes</button>
