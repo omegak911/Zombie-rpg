@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import configs from './configs/config';
+
 const Context = React.createContext();
 
 class Provider extends Component {
@@ -35,18 +37,39 @@ class Provider extends Component {
       menuCoord: [0,0],
       showInventory: false,
       currentSign: null,
+      nextBuildingAvailable: {
+        //check baseProgress and provide next level info
+      }
     }
   }
 
-  componentDidMount() {
-    let playerData = JSON.parse(localStorage.getItem('playerData'));
+  async componentDidMount() {
+    let playerData = await JSON.parse(localStorage.getItem('playerData'));
     console.log(playerData);
+    //update baseProgress
+    //then update nextBuildingAvailable
+    
   }
 
   handlePurchaseOption = (e) => {
     e.preventDefault();
     let { value } = e.target;
     console.log('handlePurchaseOption val: ', value);
+
+    if (value) {
+      let { baseProgress, coin } = this.state.player;
+      let buildingType = configs.homeBaseConfigs.buildings[this.state.currentSign];
+
+      //if player already has building, determine cost of next building
+      if (baseProgress[this.state.currentSign]) {
+        //get the level and 
+      }
+      //check if player already has building, and determine cost
+      //check if user has enough funds
+        //if yes upgrade
+        //else add
+    }
+
     this.setState({ currentSign: null })
   }
 
