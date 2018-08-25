@@ -1,0 +1,10 @@
+#inventory {
+  background-color: white;
+  border: 5px solid grey;
+  max-height: 210px;
+  max-width: 210px;
+  overflow: scroll;
+  position: fixed;
+  width: 50%;
+  z-index: 1000;
+}

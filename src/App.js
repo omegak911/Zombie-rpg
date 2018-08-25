@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import PurchaseModal from './Components/Modals/Purchase/Purchase';
 import LevelOne from './Pages/Explore/LevelOne';
 import Inventory from './Components/Modals/Inventory/Inventory';
 import Menu from './Components/Menu/Menu';
@@ -23,6 +24,7 @@ class App extends Component {
                   />
               }
             </Context.Consumer>
+            <PurchaseModal />
             <Inventory />
             <Switch>
               <Context.Consumer>
