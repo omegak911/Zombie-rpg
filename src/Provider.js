@@ -80,7 +80,38 @@ class Provider extends Component {
   }
 
   handlePurchaseOption = async (e) => {
-    
+    e.preventDefault();
+    let value = e.target.value === '1';
+    let { currentSign } = this.state;
+    let nextBuildingAvailable = {...this.state.nextBuildingAvailable};
+    let propsOfNextBuilding = nextBuildingAvailable[currentSign];
+    let player = {...this.state.player};
+
+    if (value && propsOfNextBuilding.cost) {
+      let { baseProgress, coin } = player;
+      let { cost } = propsOfNextBuilding;
+      if (coin >= cost) {
+        let { buildings } = configs.homeBaseConfigs;
+        let nextBuildingLevel = propsOfNextBuilding.level + 1;
+        //if the player has enough coin to purchase
+        coin -= cost;
+        baseProgress[currentSign] = propsOfNextBuilding;
+        delete baseProgress[currentSign].cost;
+        if (buildings[currentSign][nextBuildingLevel]) {
+          propsOfNextBuilding = buildings[currentSign][nextBuildingLevel];
+          propsOfNextBuilding.level = nextBuildingLevel;
+        } else {
+          propsOfNextBuilding = 'MAXED'
+        }
+        player.coin = coin;
+        nextBuildingAvailable[currentSign] = propsOfNextBuilding;
+        await this.setState({ player, nextBuildingAvailable });
+      } else {
+        //setState explain to the player they do not have enough coin
+        //have an ok button to exit
+      }
+    }
+    await this.setState({ currentSign: null })
   }
 
   handleSignClick = () => {
