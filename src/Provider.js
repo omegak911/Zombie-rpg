@@ -47,47 +47,57 @@ class Provider extends Component {
     let playerData = await JSON.parse(localStorage.getItem('playerData'));
     console.log(playerData);
     //update baseProgress
+    if (playerData) {
+      await this.setState({ player: playerData });
+    }
     //then update nextBuildingAvailable
+    await this.updateNextBuildingAvailable();
     
   }
 
-  handlePurchaseOption = (e) => {
-    e.preventDefault();
-    let { value } = e.target;
-    console.log('handlePurchaseOption val: ', value);
-
-    if (value) {
-      let { baseProgress, coin } = this.state.player;
-      let buildingType = configs.homeBaseConfigs.buildings[this.state.currentSign];
-
-      //if player already has building, determine cost of next building
-      if (baseProgress[this.state.currentSign]) {
-        //get the level and 
+  updateNextBuildingAvailable = () => {
+    let nextBuildingAvailable = {};
+    let { baseProgress } = this.state.player;
+    let { buildings } = configs.homeBaseConfigs;
+    
+    for (let building in buildings) {
+      if (baseProgress[building]) {
+        let { level } = baseProgress[building];
+        //if exists in baseProgress, add next level version to next
+        if (buildings[building][level + 1]) {
+          nextBuildingAvailable[building] = buildings[building][level + 1];
+          nextBuildingAvailable[building].level = level + 1;
+        } else {
+          nextBuildingAvailable[building] = 'MAXED'; //if the player already reached the max
+        }
+      } else {
+        //else add level 1 to next
+        nextBuildingAvailable[building] = buildings[building][1];
+        nextBuildingAvailable[building].level = 1;
       }
-      //check if player already has building, and determine cost
-      //check if user has enough funds
-        //if yes upgrade
-        //else add
     }
+    this.setState({ nextBuildingAvailable });
+  }
 
-    this.setState({ currentSign: null })
+  handlePurchaseOption = async (e) => {
+    
   }
 
   handleSignClick = () => {
     console.log('pressed playerBaseSign');
     this.setState({ currentSign: 'home' });
-    //make sure to change it back to null on completion
     //we'll need to configure this to work with merchants, armory, etc
   }
 
   saveGame = () => {
     //in react native, we will use asyncStorage
     //let's use localStorage for webVersion for now.  We can also use an actual DB if needed
-    localStorage.setItem('playerData', JSON.stringify(this.state));
+    localStorage.setItem('playerData', JSON.stringify(this.state.player));
   }
 
   showInventory = () => {
-    this.setState({ showInventory: !this.state.showInventory })
+    this.setState({ showInventory: !this.state.showInventory });
+    console.log(this.state);
   }
 
   updateMenuCoord = (menuCoord) => {
@@ -104,9 +114,6 @@ class Provider extends Component {
           showInventory: this.showInventory,
           handleSignClick: this.handleSignClick,
           handlePurchaseOption: this.handlePurchaseOption,
-          //we can write functions here to update state
-          //if we need the function to be used inside another function on the component
-          //we can pass it down as a prop one level up
         }}>
         {this.props.children}
       </Context.Provider>
