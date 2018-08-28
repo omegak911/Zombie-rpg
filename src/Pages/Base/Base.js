@@ -78,24 +78,16 @@ class Base extends Component {
     }, 1000);
   }
 
+  //marks buildings on map
   markBuildingCoordinates = (temp) => {
     let { playerBaseProgress } = this.props;
     for (let building in playerBaseProgress) {
-      //if home, set 4x4
-      let { coord } = playerBaseProgress[building];
-      let row = coord[0];
-      let column = coord[1];
-      if (building === 'home') {
-        for (let i = row; i < row + 4; i++) {
-          for (let j = column; j < column + 4; j++) {
-            temp[i][j] = 0;
-          }
-        }
-      } else {
-        for (let i = row; i < row + 3; i++) {
-          for (let j = column; j < column + 3; j++) {
-            temp[i][j] = 0;
-          }
+      let [row, column] = playerBaseProgress[building].coord;
+      let rowCalc = building === 'home' ? row + 4 : row + 3;
+      let colCalc = building === 'home' ? column + 4 : column + 3;
+      for (let i = row; i < rowCalc; i++) {
+        for (let j = column; j < colCalc; j++) {
+          temp[i][j] = 0;
         }
       }
     }
