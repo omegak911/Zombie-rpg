@@ -85,19 +85,36 @@ class Base extends Component {
           }}
           >
           <Context.Consumer>
-          {(provider) =>
-            <CharacterModel 
-              autoScroll={this.autoScroll} 
-              baseMatrix={baseMatrix} 
-              characterType="player"
-              handleSignClick={provider.handleSignClick}  
-              />
-          }
+            {(provider) =>
+              <CharacterModel 
+                autoScroll={this.autoScroll} 
+                baseMatrix={baseMatrix} 
+                characterType="player"
+                handleSignClick={provider.handleSignClick}  
+                />
+            }
           </Context.Consumer>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcMan" startCoord={{ startX: 21, startY: 10, top: 400, left: 840 }}/>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcWoman" startCoord={{ startX: 28, startY: 7, top: 280, left: 1120 }}/>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcGirl" startCoord={{ startX: 11, startY: 4, top: 160, left: 440 }}/>
           <CharacterModel baseMatrix={baseMatrix} characterType="npcBoy" startCoord={{ startX: 32, startY: 7, top: 280, left: 1280 }}/>
+          <Context.Consumer>
+            {({ state }) => {
+              let { baseProgress } = state.player;
+              return Object.keys(baseProgress).map( buildingName =>
+                <div className="building" key={buildingName}
+                  style={{ 
+                    position: 'relative',
+                    backgroundImage: `url(${baseProgress[buildingName].image})`,
+                    top: `${baseProgress[buildingName].top}px`, 
+                    left: `${baseProgress[buildingName].left}px`,
+                    width: 'auto',
+                    height: '100%',
+                    backgroundRepeat: 'no-repeat' }}>
+                </div>
+              )
+            }}
+          </Context.Consumer>
         </div>
       </div>
     )

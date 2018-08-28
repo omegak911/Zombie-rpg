@@ -37,6 +37,7 @@ class Provider extends Component {
       menuCoord: [0,0],
       showInventory: false,
       currentSign: null,
+      expectedBuildingCoordinate: [0,0],
       nextBuildingAvailable: {
         //check baseProgress and provide next level info
       }
@@ -82,7 +83,7 @@ class Provider extends Component {
   handlePurchaseOption = async (e) => {
     e.preventDefault();
     let value = e.target.value === '1';
-    let { currentSign } = this.state;
+    let { currentSign, expectedBuildingCoordinate } = this.state;
     let nextBuildingAvailable = {...this.state.nextBuildingAvailable};
     let propsOfNextBuilding = nextBuildingAvailable[currentSign];
     let player = {...this.state.player};
@@ -91,12 +92,22 @@ class Provider extends Component {
       let { baseProgress, coin } = player;
       let { cost } = propsOfNextBuilding;
       if (coin >= cost) {
-        let { buildings } = configs.homeBaseConfigs;
+        let { buildings, signCoordinates, buildingCoordAndTopLeft, } = configs.homeBaseConfigs;
         let nextBuildingLevel = propsOfNextBuilding.level + 1;
         //if the player has enough coin to purchase
         coin -= cost;
+        delete propsOfNextBuilding.cost;
+        for (let i = 0; i < signCoordinates.length; i++) {
+          //expectedBuildingCoord is the space associated with the sign
+          //find the index for expectedBuildingCoord
+          if (signCoordinates[i][0] === expectedBuildingCoordinate[0] && signCoordinates[i][1] === expectedBuildingCoordinate[1]) {
+            let [yAxis,xAxis,top,left] = buildingCoordAndTopLeft[i];
+            propsOfNextBuilding.coord = [yAxis,xAxis];
+            propsOfNextBuilding.top = top;
+            propsOfNextBuilding.left = left;
+          }
+        }
         baseProgress[currentSign] = propsOfNextBuilding;
-        delete baseProgress[currentSign].cost;
         if (buildings[currentSign][nextBuildingLevel]) {
           propsOfNextBuilding = buildings[currentSign][nextBuildingLevel];
           propsOfNextBuilding.level = nextBuildingLevel;
@@ -114,9 +125,9 @@ class Provider extends Component {
     await this.setState({ currentSign: null })
   }
 
-  handleSignClick = () => {
+  handleSignClick = (coordinate) => {
     console.log('pressed playerBaseSign');
-    this.setState({ currentSign: 'home' });
+    this.setState({ currentSign: 'home', expectedBuildingCoordinate: coordinate });
     //we'll need to configure this to work with merchants, armory, etc
   }
 
