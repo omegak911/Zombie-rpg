@@ -89,7 +89,7 @@ class CharacterModel extends Component {
       newDirectionIndex = 1;
       facingX = startX + 1;
     }
-    return [startX, startY, newDirectionIndex, [facingX, facingY]];
+    return [startX, startY, newDirectionIndex, [facingY, facingX]];
   }
 
   handleDirectionChange = (direction, currentDate) => {
@@ -115,7 +115,14 @@ class CharacterModel extends Component {
     let { baseMatrix } = this.props;
     let { playerFacingDirection } = this.state;
     console.log(playerFacingDirection)
-    return baseMatrix[playerFacingDirection[1]][playerFacingDirection[0]];
+
+    let { startX, startY, top, left } = this.state; 
+    console.log(`column: ${startX}`, `row: ${startY}`, `top: ${top}`, `left: ${left}`)
+    
+    return { 
+      whatIsInFront: baseMatrix[playerFacingDirection[0]][playerFacingDirection[1]],
+      coordinate: playerFacingDirection,
+    }
   }
 
   handleKeyPress = (e) => {
@@ -133,10 +140,11 @@ class CharacterModel extends Component {
 
     if (value === 'a') {
       let signType = this.isPlayerFacingSign();
-      if (signType === 'playerBaseSign') {
-        this.props.handleSignClick();
+      if (signType.whatIsInFront === 'playerBaseSign') {
+        this.props.handleSignClick(signType.coordinate);
       }
       if (signType === 'sign') {
+        //need to handle for all other signs, will still want to pass down coordinate
         console.log('pressed a on sign');
       }
     } else if (isDirection[value] && throttler && this.checkDirectionValidity(value)) {

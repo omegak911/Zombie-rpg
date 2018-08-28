@@ -14,11 +14,11 @@ class Inventory extends Component {
   render() {
     return (
       <Context.Consumer>
-      {(provider) =>
-        <div id="inventory" className={provider.state.showInventory ? 'flexCenter flexColumn' : 'hide'}>
-          <div className="inventoryCoinDisplay">coin: ${provider.state.player.coin}</div>
+      {({ state }) =>
+        <div id="inventory" className={state.showInventory ? 'flexCenter flexColumn' : 'hide'}>
+          <div className="inventoryCoinDisplay">coin: ${state.player.coin}</div>
           <div className="inventoryBoxContainer flexCenter">
-          {provider.state.player.inventory.size.map((item, i) =>
+          {state.player.inventory.size.map((item, i) =>
             <div className="inventoryBoxItem" key={i}></div>
             //the item value will represent data associated with a background image, sell rate, etc
           )}
