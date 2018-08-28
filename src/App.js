@@ -29,7 +29,11 @@ class App extends Component {
             <Switch>
               <Context.Consumer>
               {(provider) =>
-                <Route exact path='/' render={() => <Base updateMenuCoord={provider.updateMenuCoord}/>} />
+                <Route exact path='/' render={() => 
+                  <Base
+                    playerBaseProgress={provider.state.player.baseProgress}
+                    updateMenuCoord={provider.updateMenuCoord}/>
+                  } />
               }
               </Context.Consumer>
               <Route exact path='/explore' render={() => <LevelOne />} />

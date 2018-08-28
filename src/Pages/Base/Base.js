@@ -31,6 +31,9 @@ class Base extends Component {
         temp[signCoordinates[i][0]][signCoordinates[i][1]] = await 'sign';
       }
     }
+
+    await this.markBuildingCoordinates(temp);
+    
     await this.props.updateMenuCoord([offsetTop, menuLeft])
     await this.setState({ baseMatrix: temp });
     await this.centerInitialViewOnPlayer();
@@ -73,6 +76,30 @@ class Base extends Component {
       homebase.scrollTop = startTop - viewMidpointY + 20;
       homebase.style.visibility = 'visible';
     }, 1000);
+  }
+
+  markBuildingCoordinates = (temp) => {
+    let { playerBaseProgress } = this.props;
+    for (let building in playerBaseProgress) {
+      //if home, set 4x4
+      let { coord } = playerBaseProgress[building];
+      let row = coord[0];
+      let column = coord[1];
+      if (building === 'home') {
+        for (let i = row; i < row + 4; i++) {
+          for (let j = column; j < column + 4; j++) {
+            temp[i][j] = 0;
+          }
+        }
+      } else {
+        for (let i = row; i < row + 3; i++) {
+          for (let j = column; j < column + 3; j++) {
+            temp[i][j] = 0;
+          }
+        }
+      }
+    }
+    return temp;
   }
 
   render() {
