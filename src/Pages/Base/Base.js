@@ -12,31 +12,24 @@ class Base extends Component {
     super(props);
     this.state = {
       baseMatrix: mapConfigs.matrix,
-      //get entire screen height and width
-      //get inner screen height and width
-      //get inner screen position within the screen - it's height/width 80%
     }
   }
 
   async componentDidMount() {
     const { clientWidth, offsetTop, offsetLeft } = document.getElementById('homebase');
     let menuLeft = offsetLeft + clientWidth - 80;
-    //configurations to baseMatrix here based on existing buildings/signs
+    //map signs on matrix
     let { signCoordinates } = homeBaseConfigs;
     let temp = await mapConfigs.matrix.slice();
     for (let i = 0; i < signCoordinates.length; i++) {
-      if (signCoordinates[i][0] === 10 && signCoordinates[i][1] === 19) {
-        temp[signCoordinates[i][0]][signCoordinates[i][1]] = await 'playerBaseSign';
-      } else {
-        temp[signCoordinates[i][0]][signCoordinates[i][1]] = await 'sign';
-      }
+      let playerHomeSignCoord = signCoordinates[i][0] === 10 && signCoordinates[i][1] === 19;
+      temp[signCoordinates[i][0]][signCoordinates[i][1]] = await playerHomeSignCoord ? 'playerBaseSign' : 'sign';
     }
 
     await this.markBuildingCoordinates(temp);
-    
     await this.props.updateMenuCoord([offsetTop, menuLeft])
     await this.setState({ baseMatrix: temp });
-    await this.centerInitialViewOnPlayer();
+    await this.centerInitialMountViewOnPlayer();
   }
 
   //view will auto-scroll depending on player position
@@ -46,6 +39,7 @@ class Base extends Component {
     const player = document.getElementsByClassName('player')[0];
     let { offsetLeft, offsetTop } = player;
     let { clientWidth, clientHeight, scrollLeft, scrollTop } = homebase;    
+
     let playerIs = {
       tooCloseToTop: (offsetTop < (scrollTop + (clientHeight * .3))) && scrollTop > 0,
       tooCloseToBottom: (offsetTop + 40 > (scrollTop + clientHeight - (clientHeight * .3))) && scrollTop < height - clientHeight,
@@ -64,7 +58,7 @@ class Base extends Component {
     }
   }
 
-  centerInitialViewOnPlayer = () => {
+  centerInitialMountViewOnPlayer = () => {
     const homebase = document.getElementById('homebase');
     let viewMidpointX = Math.floor(homebase.clientWidth/2);
     let viewMidpointY = Math.floor(homebase.clientHeight/2);
@@ -78,7 +72,7 @@ class Base extends Component {
     }, 1000);
   }
 
-  //marks buildings on map
+  //marks buildings on matrix
   markBuildingCoordinates = (temp) => {
     let { playerBaseProgress } = this.props;
     for (let building in playerBaseProgress) {
