@@ -50,7 +50,7 @@ const homeBaseConfigs = {
         image: '',
       },
     },
-    merchantBase: {
+    merchant: {
       1: {
         cost: 50,
         housing: 1,
@@ -67,7 +67,7 @@ const homeBaseConfigs = {
         image: ''
       },
     },
-    armoryBase: {
+    armory: {
       1: {
         cost: 50,
         housing: 1,

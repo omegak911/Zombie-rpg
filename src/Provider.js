@@ -40,7 +40,7 @@ class Provider extends Component {
       expectedBuildingCoordinate: [0,0],
       nextBuildingAvailable: {
         //check baseProgress and provide next level info
-      }
+      },
     }
   }
 
@@ -53,7 +53,6 @@ class Provider extends Component {
     }
     //then update nextBuildingAvailable
     await this.updateNextBuildingAvailable();
-    
   }
 
   updateNextBuildingAvailable = () => {
@@ -82,29 +81,27 @@ class Provider extends Component {
 
   handlePurchaseOption = async (e) => {
     e.preventDefault();
-    let value = e.target.value === '1';
-    let { currentSign, expectedBuildingCoordinate } = this.state;
-    let nextBuildingAvailable = {...this.state.nextBuildingAvailable};
-    let propsOfNextBuilding = nextBuildingAvailable[currentSign];
-    let player = {...this.state.player};
+    let value = e.target.value === '1'; //if the player pressed 'yes'
+    let { currentSign, expectedBuildingCoordinate, player, nextBuildingAvailable } = this.state;
+    let playerData = {...player};
+    let nextBuildingAvailableData = {...nextBuildingAvailable};
+    let propsOfNextBuilding = nextBuildingAvailableData[currentSign];
 
     if (value && propsOfNextBuilding.cost) {
-      let { baseProgress, coin } = player;
+      let { baseProgress, coin } = playerData;
       let { cost } = propsOfNextBuilding;
-      if (coin >= cost) {
+      if (coin >= cost) { //if the playerData has enough coin to purchase
         let { buildings, signCoordinates, buildingCoordAndTopLeft, } = configs.homeBaseConfigs;
         let nextBuildingLevel = propsOfNextBuilding.level + 1;
-        //if the player has enough coin to purchase
         coin -= cost;
         delete propsOfNextBuilding.cost;
-        for (let i = 0; i < signCoordinates.length; i++) {
-          //expectedBuildingCoord is the space associated with the sign
-          //find the index for expectedBuildingCoord
+        for (let i = 0; i < signCoordinates.length; i++) { //find building coordinates based on sign coordinates
           if (signCoordinates[i][0] === expectedBuildingCoordinate[0] && signCoordinates[i][1] === expectedBuildingCoordinate[1]) {
             let [yAxis,xAxis,top,left] = buildingCoordAndTopLeft[i];
             propsOfNextBuilding.coord = [yAxis,xAxis];
             propsOfNextBuilding.top = top;
             propsOfNextBuilding.left = left;
+            propsOfNextBuilding.buildingPlotNum = i;
           }
         }
         baseProgress[currentSign] = propsOfNextBuilding;
@@ -114,20 +111,24 @@ class Provider extends Component {
         } else {
           propsOfNextBuilding = 'MAXED'
         }
-        player.coin = coin;
-        nextBuildingAvailable[currentSign] = propsOfNextBuilding;
-        await this.setState({ player, nextBuildingAvailable });
+        playerData.coin = coin;
+        nextBuildingAvailableData[currentSign] = propsOfNextBuilding;
+        await this.setState({ playerData, nextBuildingAvailableData });
       } else {
         //setState explain to the player they do not have enough coin
-        //have an ok button to exit
+        //have an ok button to exit;
       }
     }
-    await this.setState({ currentSign: null })
+    await this.setState({ currentSign: null });
   }
 
-  handleSignClick = (coordinate) => {
-    console.log('pressed playerBaseSign');
-    this.setState({ currentSign: 'home', expectedBuildingCoordinate: coordinate });
+  handleSignClick = (coordinate, whatIsInFront) => {
+    console.log(`pressed ${whatIsInFront} sign`);
+    if (whatIsInFront === 'sign') { //first time purchase
+      console.log('now we gotta allow player to choose from list')
+    } else {
+      this.setState({ currentSign: whatIsInFront, expectedBuildingCoordinate: coordinate });
+    }
     //we'll need to configure this to work with merchants, armory, etc
   }
 

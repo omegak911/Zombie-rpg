@@ -23,7 +23,7 @@ class Base extends Component {
     let temp = await mapConfigs.matrix.slice();
     for (let i = 0; i < signCoordinates.length; i++) {
       let playerHomeSignCoord = signCoordinates[i][0] === 10 && signCoordinates[i][1] === 19;
-      temp[signCoordinates[i][0]][signCoordinates[i][1]] = await playerHomeSignCoord ? 'playerBaseSign' : 'sign';
+      temp[signCoordinates[i][0]][signCoordinates[i][1]] = await playerHomeSignCoord ? 'home' : 'sign';
     }
 
     await this.markBuildingCoordinates(temp);
@@ -77,6 +77,14 @@ class Base extends Component {
     let { playerBaseProgress } = this.props;
     for (let building in playerBaseProgress) {
       let [row, column] = playerBaseProgress[building].coord;
+
+      //marks signs with values of purchased buildings
+      let { buildingPlotNum } = playerBaseProgress[building];
+      let { signCoordinates } = homeBaseConfigs;
+      let [ signRow, signColumn ] = signCoordinates[buildingPlotNum];
+      temp[signRow][signColumn] = building;
+
+      //marks building locations so player cannot traverse on them
       let rowCalc = building === 'home' ? row + 4 : row + 3;
       let colCalc = building === 'home' ? column + 4 : column + 3;
       for (let i = row; i < rowCalc; i++) {
