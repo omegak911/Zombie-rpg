@@ -139,14 +139,8 @@ class CharacterModel extends Component {
     }
 
     if (value === 'a') {
-      let signType = this.isPlayerFacingSign();
-      if (signType.whatIsInFront === 'playerBaseSign') {
-        this.props.handleSignClick(signType.coordinate);
-      }
-      if (signType === 'sign') {
-        //need to handle for all other signs, will still want to pass down coordinate
-        console.log('pressed a on sign');
-      }
+      let { coordinate, whatIsInFront} = this.isPlayerFacingSign();
+      this.props.handleSignClick(coordinate, whatIsInFront);
     } else if (isDirection[value] && throttler && this.checkDirectionValidity(value)) {
       this.handleDirectionChange(value, currentDate);
       autoScroll();

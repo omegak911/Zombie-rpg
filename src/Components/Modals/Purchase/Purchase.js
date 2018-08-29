@@ -20,29 +20,42 @@ class Purchase extends Component {
             return currentSign ?
             <div className="veilOfDarkness flexCenter">
               <div id="purchase">
-                {baseProgress[currentSign] ?
-                  <div className="purchaseText">
-                    <p>
-                      Upgrade to level {baseProgress[currentSign].level + 1}?
-                    </p>
-                    <p>
-                      ${homeBaseConfigs.buildings[currentSign][baseProgress[currentSign].level + 1].cost}
-                    </p>
-                  </div>
+                {currentSign === 'showOptions' ?
+                <div className="showOptions flexCenter flexColumn">
+                  {Object.keys(homeBaseConfigs.buildings).map(building => {
+                    if (building !== 'home') {
+                      return <button onClick={() => provider.handleSignClick(null, building)} key={building}>{building}</button>
+                    }
+                    return
+                  })}
+                </div>
                 :
                 <div>
-                  <p>
-                    Purchase {currentSign}?
-                  </p>
-                  <p>
-                    ${homeBaseConfigs.buildings[currentSign][1].cost}
-                  </p>
+                  {baseProgress[currentSign] ?
+                    <div className="purchaseText">
+                      <p>
+                        Upgrade to level {baseProgress[currentSign].level + 1}?
+                      </p>
+                      <p>
+                        ${homeBaseConfigs.buildings[currentSign][baseProgress[currentSign].level + 1].cost}
+                      </p>
+                    </div>
+                  :
+                  <div>
+                    <p>
+                      Purchase {currentSign}?
+                    </p>
+                    <p>
+                      ${homeBaseConfigs.buildings[currentSign][1].cost}
+                    </p>
+                  </div>
+                  }
+                  <div>
+                  <button value="1" onClick={provider.handlePurchaseOption}>Yes</button>
+                  <button value="0" onClick={provider.handlePurchaseOption}>No</button>
+                  </div>
                 </div>
                 }
-                <div>
-                <button value="1" onClick={provider.handlePurchaseOption}>Yes</button>
-                <button value="0" onClick={provider.handlePurchaseOption}>No</button>
-                </div>
               </div>
             </div>
             :

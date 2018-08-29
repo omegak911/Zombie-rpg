@@ -124,9 +124,13 @@ class Provider extends Component {
 
   handleSignClick = (coordinate, whatIsInFront) => {
     console.log(`pressed ${whatIsInFront} sign`);
-    if (whatIsInFront === 'sign') { //first time purchase
-      console.log('now we gotta allow player to choose from list')
+    coordinate = coordinate || this.state.expectedBuildingCoordinate;
+    //if it's a sign, present modal with multiple choices aka first time purchase
+    if (whatIsInFront === 'sign') {
+      console.log('now we gotta allow player to choose from list');
+      this.setState({ currentSign: 'showOptions', expectedBuildingCoordinate: coordinate });
     } else {
+      //if it's the home or a purchased building, it should automatically default
       this.setState({ currentSign: whatIsInFront, expectedBuildingCoordinate: coordinate });
     }
     //we'll need to configure this to work with merchants, armory, etc
