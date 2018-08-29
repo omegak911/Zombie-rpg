@@ -34,7 +34,7 @@ class Purchase extends Component {
                   {baseProgress[currentSign] ?
                     <div className="purchaseText">
                       <p>
-                        Upgrade to level {baseProgress[currentSign].level + 1}?
+                        Upgrade {currentSign} to level {baseProgress[currentSign].level + 1}?
                       </p>
                       <p>
                         ${homeBaseConfigs.buildings[currentSign][baseProgress[currentSign].level + 1].cost}

@@ -13,7 +13,7 @@ class Provider extends Component {
         baseProgress: {
 
         },
-        coin: 100,
+        coin: 0,
         defense: 5,
         dmg: 1,
         equipment: {

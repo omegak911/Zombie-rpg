@@ -1,5 +1,6 @@
 import backgroundImage from '../assets/maps/Base4.png';
 import homeLevelOne from '../assets/buildings/PlayerBase1.png';
+import npcBuildingLevelOne from '../assets/buildings/npcBase1.png';
 
 const homeBaseConfigs = {
   signCoordinates: [[2,26],[3,9],[3,13],[6,28],[6,32],[9,5],[10,19],[12,3],[12,31]],
@@ -54,7 +55,7 @@ const homeBaseConfigs = {
       1: {
         cost: 50,
         housing: 1,
-        image: '',
+        image: npcBuildingLevelOne,
       },
       2: {
         cost: 500,
@@ -71,7 +72,7 @@ const homeBaseConfigs = {
       1: {
         cost: 50,
         housing: 1,
-        image: '',
+        image: npcBuildingLevelOne,
       },
       2: {
         cost: 500,
@@ -88,7 +89,7 @@ const homeBaseConfigs = {
       1: {
         cost: 2000,
         housing: 0,
-        image: '',
+        image: npcBuildingLevelOne,
       },
       2: {
         cost: 20000,
@@ -105,7 +106,7 @@ const homeBaseConfigs = {
       1: {
         cost: 50,
         housing: 1,
-        image: '',
+        image: npcBuildingLevelOne,
       },
       2: {
         cost: 500,

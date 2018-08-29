@@ -125,11 +125,11 @@ class Base extends Component {
               return Object.keys(baseProgress).map( buildingName =>
                 <div className="building" key={buildingName}
                   style={{ 
-                    position: 'relative',
+                    position: 'absolute',
                     backgroundImage: `url(${baseProgress[buildingName].image})`,
                     top: `${baseProgress[buildingName].top}px`, 
                     left: `${baseProgress[buildingName].left}px`,
-                    width: 'auto',
+                    width: '100%',
                     height: '100%',
                     backgroundRepeat: 'no-repeat' }}>
                 </div>
