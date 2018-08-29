@@ -116,12 +116,13 @@ class CharacterModel extends Component {
     let { playerFacingDirection } = this.state;
     console.log(playerFacingDirection)
 
+    //****delete this once we no longer need coordinates****
     let { startX, startY, top, left } = this.state; 
     console.log(`column: ${startX}`, `row: ${startY}`, `top: ${top}`, `left: ${left}`)
     
     return { 
-      whatIsInFront: baseMatrix[playerFacingDirection[0]][playerFacingDirection[1]],
       coordinate: playerFacingDirection,
+      whatIsInFront: baseMatrix[playerFacingDirection[0]][playerFacingDirection[1]],
     }
   }
 
@@ -140,7 +141,10 @@ class CharacterModel extends Component {
 
     if (value === 'a') {
       let { coordinate, whatIsInFront} = this.isPlayerFacingSign();
-      this.props.handleSignClick(coordinate, whatIsInFront);
+      if (isNaN(whatIsInFront)) {
+        this.props.handleSignClick(coordinate, whatIsInFront);
+      }
+      console.log(whatIsInFront)
     } else if (isDirection[value] && throttler && this.checkDirectionValidity(value)) {
       this.handleDirectionChange(value, currentDate);
       autoScroll();
