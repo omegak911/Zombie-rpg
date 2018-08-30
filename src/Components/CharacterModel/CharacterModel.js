@@ -36,7 +36,7 @@ class CharacterModel extends Component {
       let { startX, startY, top, left } = this.props.startCoord;
       this.setState({ startX, startY, top, left });
 
-      setInterval(() => {
+      this.interval = setInterval(() => {
         let { directions } = this.state;
         let randomIndex = Math.floor(Math.random() * 4);
         let direction = directions[randomIndex];
@@ -52,6 +52,9 @@ class CharacterModel extends Component {
     const { characterType } = this.props;
     if (characterType === 'player') {
       window.removeEventListener('keydown', this.handleKeyPress);
+    }
+    if (this.interval) {
+      clearInterval(this.interval);
     }
   }
 
