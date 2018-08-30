@@ -23,11 +23,12 @@ class Purchase extends Component {
                 {currentSign === 'showOptions' ?
                 <div className="showOptions flexCenter flexColumn">
                   {Object.keys(homeBaseConfigs.buildings).map(building => {
-                    if (building !== 'home') {
+                    if (building !== 'home' && !baseProgress[building]) {
                       return <button onClick={() => provider.handleSignClick(null, building)} key={building}>{building}</button>
                     }
                     return
                   })}
+                  <button onClick={provider.setCurrentSignNull}>exit</button>
                 </div>
                 :
                 <div>

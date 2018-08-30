@@ -119,7 +119,7 @@ class Provider extends Component {
         //have an ok button to exit;
       }
     }
-    await this.setState({ currentSign: null });
+    await this.setCurrentSignNull();
   }
 
   handleSignClick = (coordinate, whatIsInFront) => {
@@ -142,6 +142,10 @@ class Provider extends Component {
     localStorage.setItem('playerData', JSON.stringify(this.state.player));
   }
 
+  setCurrentSignNull = () => {
+    this.setState({ currentSign: null });
+  }
+
   showInventory = () => {
     this.setState({ showInventory: !this.state.showInventory });
     console.log(this.state);
@@ -161,6 +165,7 @@ class Provider extends Component {
           showInventory: this.showInventory,
           handleSignClick: this.handleSignClick,
           handlePurchaseOption: this.handlePurchaseOption,
+          setCurrentSignNull: this.setCurrentSignNull,
         }}>
         {this.props.children}
       </Context.Provider>
