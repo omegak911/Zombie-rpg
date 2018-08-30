@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 
 import CharacterModel from '../../Components/CharacterModel/CharacterModel';
 import { Context } from '../../Provider';
-import configs from '../../configs/config';
+import { characterConfigs, homeBaseConfigs, mapConfigs, movementConfigs } from '../../configs/config';
 import './Base.css';
-
-const { characterConfigs, homeBaseConfigs, mapConfigs, movementConfigs } = configs;
 
 class Base extends Component {
   constructor(props) {
@@ -112,6 +110,7 @@ class Base extends Component {
                 baseMatrix={baseMatrix} 
                 characterType="player"
                 handleSignClick={provider.handleSignClick}  
+                toggleConfirmTravel={provider.toggleConfirmTravel}
                 />
             }
           </Context.Consumer>

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import configs from '../../configs/config';
+import { characterConfigs, movementConfigs } from '../../configs/config';
 import './CharacterModel.css';
 
-const { player } = configs.characterConfigs;
+const { player } = characterConfigs;
 
 class CharacterModel extends Component {
   constructor(props) {
@@ -16,10 +16,10 @@ class CharacterModel extends Component {
       playerSprites: player.spriteCrop,
       playerFacingDirection: [player.startRow + 1, player.startColumn],
       npcSprites: {
-        npcMan: configs.characterConfigs.npcMan.spriteCrop,
-        npcWoman: configs.characterConfigs.npcWoman.spriteCrop,
-        npcGirl: configs.characterConfigs.npcGirl.spriteCrop,
-        npcBoy: configs.characterConfigs.npcBoy.spriteCrop,
+        npcMan: characterConfigs.npcMan.spriteCrop,
+        npcWoman: characterConfigs.npcWoman.spriteCrop,
+        npcGirl: characterConfigs.npcGirl.spriteCrop,
+        npcBoy: characterConfigs.npcBoy.spriteCrop,
       },
       directions: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'],
       directionIndex: 0,
@@ -56,10 +56,13 @@ class CharacterModel extends Component {
   }
 
   checkDirectionValidity = (direction) => {
-    const { baseMatrix } = this.props;
+    const { baseMatrix, characterType, toggleConfirmTravel } = this.props;
     const [ x, y, directionIndex, facingCoord ] = this.directionConverter(direction);
-    if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length && baseMatrix[y][x] === 1) {
+    if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length && (baseMatrix[y][x] === 1 || baseMatrix[y][x] === 'worldmap')) {
       this.setState({ startX: x, startY: y, directionIndex, throttle: true, playerFacingDirection: facingCoord });
+      if (baseMatrix[y][x] === 'worldmap' && characterType === 'player') {
+        toggleConfirmTravel('worldmap');
+      }
       return true;
     } else {
       return false;
@@ -94,10 +97,10 @@ class CharacterModel extends Component {
 
   handleDirectionChange = (direction, currentDate) => {
     const calculations = {
-      ArrowUp: this.state.top - configs.movementConfigs.vertical,
-      ArrowDown: this.state.top + configs.movementConfigs.vertical,
-      ArrowLeft: this.state.left - configs.movementConfigs.horizontal,
-      ArrowRight: this.state.left + configs.movementConfigs.horizontal
+      ArrowUp: this.state.top - movementConfigs.vertical,
+      ArrowDown: this.state.top + movementConfigs.vertical,
+      ArrowLeft: this.state.left - movementConfigs.horizontal,
+      ArrowRight: this.state.left + movementConfigs.horizontal
     }
 
     let topLeft = 'top';
@@ -162,7 +165,7 @@ class CharacterModel extends Component {
     return (
       <div id="characterModel" className={classN} autoFocus={true}
         style={{ 
-          backgroundImage: `url(${configs.characterConfigs[characterType].backgroundImage})`,
+          backgroundImage: `url(${characterConfigs[characterType].backgroundImage})`,
           backgroundPosition: `${sprites[directionIndex]}`,
           top: `${top}px`, 
           left: `${left}px` }}>
