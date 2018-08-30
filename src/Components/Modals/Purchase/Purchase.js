@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { homeBaseConfigs } from '../../../configs/config';
-import { Context } from '../../../Provider';
+// import { Context } from '../../../Provider/Provider';
+import Context from '../../../Provider/Context';
 import './Purchase.css';
 
 const Purchase = (props) =>

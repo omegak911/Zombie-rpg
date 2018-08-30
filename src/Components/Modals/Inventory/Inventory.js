@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import { Context } from '../../../Provider';
+// import { Context } from '../../../Provider/Provider';
+import Context from '../../../Provider/Context';
 import './Inventory.css';
 
 class Inventory extends Component {

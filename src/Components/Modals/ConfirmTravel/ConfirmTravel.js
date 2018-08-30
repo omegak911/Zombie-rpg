@@ -1,5 +1,6 @@
 import React from 'react';
-import { Context } from '../../../Provider';
+// import { Context } from '../../../Provider/Provider';
+import Context from '../../../Provider/Context';
 
 const ConfirmTravel = (props) => {
 

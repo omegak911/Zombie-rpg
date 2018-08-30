@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
+// import { homeBaseConfigs } from './configs/config';
+import { homeBaseConfigs } from '../configs/config';
 
-import { homeBaseConfigs } from './configs/config';
-
-const Context = React.createContext();
+import Context from './Context';
+// const Context = React.createContext();
 
 class Provider extends Component {
   constructor(props) {
@@ -13,7 +15,7 @@ class Provider extends Component {
         baseProgress: {
 
         },
-        coin: 0,
+        coin: 10000,
         defense: 5,
         dmg: 1,
         equipment: {
@@ -122,6 +124,7 @@ class Provider extends Component {
         playerData.coin = coin;
         nextBuildingAvailableData[currentSign] = propsOfNextBuilding;
         await this.setState({ playerData, nextBuildingAvailableData });
+        console.log(playerData)
       } else {
         //setState explain to the player they do not have enough coin
         //have an ok button to exit;
@@ -157,6 +160,7 @@ class Provider extends Component {
   showInventory = () => {
     this.setState({ showInventory: !this.state.showInventory });
     console.log(this.state);
+    console.log(this.props)
   }
 
   updateMenuCoord = (menuCoord) => {
@@ -182,4 +186,4 @@ class Provider extends Component {
   }
 }
 
-export { Context, Provider };
+export default withRouter(Provider);

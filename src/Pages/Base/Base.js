@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import CharacterModel from '../../Components/CharacterModel/CharacterModel';
-import { Context } from '../../Provider';
+// import { Context } from '../../Provider/Provider';
+import Context from '../../Provider/Context';
 import { characterConfigs, homeBaseConfigs, mapConfigs, movementConfigs } from '../../configs/config';
 import './Base.css';
 
