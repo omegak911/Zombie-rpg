@@ -22,3 +22,11 @@ body {
 .hide {
   display: none;
 }
+
+.veilOfDarkness {
+  background-color: rgba(170,170,170,0.5);
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  z-index: 1001;
+}
