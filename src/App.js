@@ -54,7 +54,8 @@ class App extends Component {
                 <Context.Consumer>
                 {(provider) =>
                     <WorldMap 
-                      history={provider.history}
+                      toggleConfirmTravel={provider.toggleConfirmTravel}
+                      worldMapProgress={provider.state.player.worldMapProgress}
                     />
                 }
                 </Context.Consumer>

@@ -9,17 +9,37 @@ class WorldMap extends Component {
 
     }
   }
+
+  handleClick = (level) => {
+    let { toggleConfirmTravel, worldMapProgress } = this.props;
+    let selectedDestination = level === 0 ? '/' : 'level/' + level;
+
+    if (worldMapProgress < level) {
+      console.log('you are too weak modal.  Come back later');
+    } else {
+      console.log('need to update provider for selected destination, confirmTravel should take care of the rest');
+      toggleConfirmTravel(selectedDestination);
+    }
+  }
   
   render() {
     return (
-      <div id="worldmap" className="page" style={{ backgroundImage: `url(${worldMapConfigs.backgroundImage})` }}>
+      <div id="worldmap" className="page">
+        <div className="worldmap" style={{ backgroundImage: `url(${worldMapConfigs.backgroundImage})` }}>
         {worldMapConfigs.levelsAndPositions.map(({ level, top, left }) =>
           <div 
             key={level}
-            style={{ height: '40px', width: '40px', position: 'absolute', top, left, }} 
-            onClick={() => console.log('clicked ', level)}>
+            style={{ 
+              backgroundImage: `url(${this.props.worldMapProgress < level ? worldMapConfigs.soldierImage : ''})`,
+              height: '40px', 
+              width: '40px', 
+              position: 'absolute', 
+              top, 
+              left, }} 
+            onClick={() => this.handleClick(level)}>
           </div>
         )}
+        </div>
       </div>
     )
   }

@@ -19,7 +19,7 @@ const ConfirmTravel = (props) => {
       {({ state }) => {
         return state.selectedDestination ?
         <div className="veilOfDarkness flexCenter flexColumn">
-          <p>Travel to {state.selectedDestination}?</p>
+          <p>Travel to {state.selectedDestination === '/' ? 'Base' : state.selectedDestination}?</p>
           <div>
           <button value="1" onClick={confirmTravel}>Yes</button>
           <button value="0" onClick={confirmTravel}>No</button>
