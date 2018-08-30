@@ -4,6 +4,7 @@ import soldierImage from '../assets/sprites/Soldier.png';
 const worldMapConfig = {
   backgroundImage,
   soldierImage,
+  backgroundHeightWidth: [680, 840],
   levelsAndPositions: [
     {
       level: 0, //base

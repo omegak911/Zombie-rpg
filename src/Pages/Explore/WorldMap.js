@@ -10,6 +10,23 @@ class WorldMap extends Component {
     }
   }
 
+  componentDidMount() {
+    let worldmap = document.getElementById('worldmap');
+
+    //we shouldnt need this if the player always starts on '/'
+    // let { clientWidth, offsetTop, offsetLeft } = worldmap;
+    // let menuLeft = offsetLeft + clientWidth - 80;
+    // this.props.updateMenuCoord([offsetTop, menuLeft])
+
+    let [ top, left ] = worldMapConfigs.backgroundHeightWidth;
+    worldmap.style.visibility = 'hidden';
+    worldmap.scrollLeft = left;  
+    setTimeout(() => {
+      worldmap.scrollTop = top;
+      worldmap.style.visibility = 'visible';
+    }, 1000);
+  }
+
   handleClick = (level) => {
     let { toggleConfirmTravel, worldMapProgress } = this.props;
     let selectedDestination = level === 0 ? '/' : 'level/' + level;

@@ -54,6 +54,7 @@ class App extends Component {
                 <Context.Consumer>
                 {(provider) =>
                     <WorldMap 
+                      updateMenuCoord={provider.updateMenuCoord}
                       toggleConfirmTravel={provider.toggleConfirmTravel}
                       worldMapProgress={provider.state.player.worldMapProgress}
                     />
