@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { worldMapConfigs } from '../../configs/config';
-
+import './WorldMap.css';
 class WorldMap extends Component {
   constructor(props) {
     super(props);
@@ -12,12 +12,12 @@ class WorldMap extends Component {
   
   render() {
     return (
-      <div style={{ backgroundImage: worldMapConfigs.backgroundImage }}>
-        {worldMapConfigs.levelsAndPositions.map(({ top, left }, i) =>
+      <div id="worldmap" className="page" style={{ backgroundImage: `url(${worldMapConfigs.backgroundImage})` }}>
+        {worldMapConfigs.levelsAndPositions.map(({ level, top, left }) =>
           <div 
-            key={i}
-            style={{ height: '40px', width: '40px', top, left, }} 
-            onClick={() => console.log('clicked')}>
+            key={level}
+            style={{ height: '40px', width: '40px', position: 'absolute', top, left, }} 
+            onClick={() => console.log('clicked ', level)}>
           </div>
         )}
       </div>
