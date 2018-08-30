@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import PurchaseModal from './Components/Modals/Purchase/Purchase';
-import LevelOne from './Pages/Explore/LevelOne';
+// import LevelOne from './Pages/Explore/LevelOne';
+import WorldMap from './Pages/Explore/WorldMap';
 import Inventory from './Components/Modals/Inventory/Inventory';
 import Menu from './Components/Menu/Menu';
 import { Context, Provider } from './Provider';
 import Base from './Pages/Base/Base';
+import ConfirmTravel from './Components/Modals/ConfirmTravel/ConfirmTravel';
 import './App.css';
 
 class App extends Component {
+
   render() {
     return (
       <BrowserRouter>
@@ -25,6 +28,13 @@ class App extends Component {
               }
             </Context.Consumer>
             <PurchaseModal />
+            <Context.Consumer>
+              {({ toggleConfirmTravel }) =>
+                <ConfirmTravel 
+                  toggleConfirmTravel={toggleConfirmTravel}
+                />
+              }
+            </Context.Consumer>
             <Inventory />
             <Switch>
               <Context.Consumer>
@@ -36,7 +46,7 @@ class App extends Component {
                   } />
               }
               </Context.Consumer>
-              <Route exact path='/explore' render={() => <LevelOne />} />
+              <Route path='/worldmap' render={() => <WorldMap />} />
             </Switch>
           </Provider>
         </div>

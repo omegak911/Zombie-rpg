@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import configs from './configs/config';
+import { homeBaseConfigs } from './configs/config';
 
 const Context = React.createContext();
 
@@ -33,6 +33,7 @@ class Provider extends Component {
         },
         totalPlaytime: '0h0m',
         zombiesKilled: 0,
+        worldMapProgress: 1,
       },
       menuCoord: [0,0],
       showInventory: false,
@@ -41,6 +42,8 @@ class Provider extends Component {
       nextBuildingAvailable: {
         //check baseProgress and provide next level info
       },
+      selectedDestination: null,
+
     }
   }
 
@@ -58,7 +61,7 @@ class Provider extends Component {
   updateNextBuildingAvailable = () => {
     let nextBuildingAvailable = {};
     let { baseProgress } = this.state.player;
-    let { buildings } = configs.homeBaseConfigs;
+    let { buildings } = homeBaseConfigs;
     
     for (let building in buildings) {
       if (baseProgress[building]) {
@@ -79,6 +82,11 @@ class Provider extends Component {
     this.setState({ nextBuildingAvailable });
   }
 
+  toggleConfirmTravel = (selectedDestination) => {
+    this.setState({ selectedDestination });
+    console.log(this.props)
+  }
+
   handlePurchaseOption = async (e) => {
     e.preventDefault();
     let value = e.target.value === '1'; //if the player pressed 'yes'
@@ -91,7 +99,7 @@ class Provider extends Component {
       let { baseProgress, coin } = playerData;
       let { cost } = propsOfNextBuilding;
       if (coin >= cost) { //if the playerData has enough coin to purchase
-        let { buildings, signCoordinates, buildingCoordAndTopLeft, } = configs.homeBaseConfigs;
+        let { buildings, signCoordinates, buildingCoordAndTopLeft, } = homeBaseConfigs;
         let nextBuildingLevel = propsOfNextBuilding.level + 1;
         coin -= cost;
         delete propsOfNextBuilding.cost;
@@ -166,6 +174,7 @@ class Provider extends Component {
           handleSignClick: this.handleSignClick,
           handlePurchaseOption: this.handlePurchaseOption,
           setCurrentSignNull: this.setCurrentSignNull,
+          toggleConfirmTravel: this.toggleConfirmTravel,
         }}>
         {this.props.children}
       </Context.Provider>
