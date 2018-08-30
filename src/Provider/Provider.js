@@ -179,6 +179,7 @@ class Provider extends Component {
           handlePurchaseOption: this.handlePurchaseOption,
           setCurrentSignNull: this.setCurrentSignNull,
           toggleConfirmTravel: this.toggleConfirmTravel,
+          history: this.props.history,
         }}>
         {this.props.children}
       </Context.Provider>

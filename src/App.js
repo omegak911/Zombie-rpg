@@ -30,24 +30,35 @@ class App extends Component {
             </Context.Consumer>
             <PurchaseModal />
             <Context.Consumer>
-              {({ toggleConfirmTravel }) =>
+              {({ history, state, toggleConfirmTravel }) =>
                 <ConfirmTravel 
                   toggleConfirmTravel={toggleConfirmTravel}
+                  selectedDestination={state.selectedDestination}
+                  history={history}
                 />
               }
             </Context.Consumer>
             <Inventory />
             <Switch>
-              <Context.Consumer>
-              {(provider) =>
-                <Route exact path='/' render={() => 
-                  <Base
-                    playerBaseProgress={provider.state.player.baseProgress}
-                    updateMenuCoord={provider.updateMenuCoord}/>
-                  } />
-              }
-              </Context.Consumer>
-              <Route path='/worldmap' render={() => <WorldMap />} />
+              <Route exact path='/' render={() => 
+                <Context.Consumer>
+                  {(provider) =>
+                    <Base
+                      playerBaseProgress={provider.state.player.baseProgress}
+                      updateMenuCoord={provider.updateMenuCoord}
+                    />
+                  }
+                </Context.Consumer>
+              } />
+              <Route path='/worldmap' render={() => 
+                <Context.Consumer>
+                {(provider) =>
+                    <WorldMap 
+                      history={provider.history}
+                    />
+                }
+                </Context.Consumer>
+              } />
             </Switch>
           </Provider>
         </div>

@@ -7,13 +7,11 @@ const ConfirmTravel = (props) => {
   const confirmTravel = (e) => {
     e.preventDefault();
     let value = e.target.value === '1';
-
+    let { history, selectedDestination, toggleConfirmTravel } = props;
     if (value) {
-      //use router to navigate pages
-      console.log(props)
+      history.push(selectedDestination);
     }
-
-    // props.toggleConfirmTravel(null);
+    toggleConfirmTravel(null);
   }
 
   return (
