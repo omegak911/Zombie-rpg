@@ -13,11 +13,6 @@ class WorldMap extends Component {
   componentDidMount() {
     let worldmap = document.getElementById('worldmap');
 
-    //we shouldnt need this if the player always starts on '/'
-    // let { clientWidth, offsetTop, offsetLeft } = worldmap;
-    // let menuLeft = offsetLeft + clientWidth - 80;
-    // this.props.updateMenuCoord([offsetTop, menuLeft])
-
     let [ top, left ] = worldMapConfigs.backgroundHeightWidth;
     worldmap.style.visibility = 'hidden';
     worldmap.scrollLeft = left;  

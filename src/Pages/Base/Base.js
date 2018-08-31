@@ -10,65 +10,25 @@ class Base extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      baseMatrix: mapConfigs.matrix,
+      baseMatrix: mapConfigs.home,
     }
   }
 
   async componentDidMount() {
-    const { clientWidth, offsetTop, offsetLeft } = document.getElementById('homebase');
+    let homebase = document.getElementById('homebase');
+    let { clientWidth, offsetTop, offsetLeft } = homebase;
     let menuLeft = offsetLeft + clientWidth - 80;
-    //map signs on matrix
-    let { signCoordinates } = homeBaseConfigs;
-    let temp = await mapConfigs.matrix.slice();
-    for (let i = 0; i < signCoordinates.length; i++) {
-      let playerHomeSignCoord = signCoordinates[i][0] === 10 && signCoordinates[i][1] === 19;
-      temp[signCoordinates[i][0]][signCoordinates[i][1]] = await playerHomeSignCoord ? 'home' : 'sign';
-    }
 
+    let temp = await this.markSignCoordinates();
     await this.markBuildingCoordinates(temp);
     await this.props.updateMenuCoord([offsetTop, menuLeft])
     await this.setState({ baseMatrix: temp });
-    await this.centerInitialMountViewOnPlayer();
+    await this.props.centerInitialViewOnPlayer(homebase);
   }
 
-  //view will auto-scroll depending on player position
   autoScroll = () => {
-    const { height, width } = mapConfigs;
     const homebase = document.getElementById('homebase');
-    const player = document.getElementsByClassName('player')[0];
-    let { offsetLeft, offsetTop } = player;
-    let { clientWidth, clientHeight, scrollLeft, scrollTop } = homebase;    
-
-    let playerIs = {
-      tooCloseToTop: (offsetTop < (scrollTop + (clientHeight * .3))) && scrollTop > 0,
-      tooCloseToBottom: (offsetTop + 40 > (scrollTop + clientHeight - (clientHeight * .3))) && scrollTop < height - clientHeight,
-      tooCloseToLeft: (offsetLeft < (scrollLeft + (clientWidth * .3))) && scrollLeft > 0,
-      tooCloseToRight: (offsetLeft + 40 > (scrollLeft + clientWidth - (clientWidth * .3))) && scrollLeft < width - clientWidth,
-    }
-
-    if (playerIs.tooCloseToTop) {
-      homebase.scrollTop -= movementConfigs.vertical;
-    } else if (playerIs.tooCloseToBottom) {
-      homebase.scrollTop += movementConfigs.vertical;
-    } else if (playerIs.tooCloseToLeft) {
-      homebase.scrollLeft -= movementConfigs.horizontal;
-    } else if (playerIs.tooCloseToRight) {
-      homebase.scrollLeft += movementConfigs.horizontal;
-    }
-  }
-
-  centerInitialMountViewOnPlayer = () => {
-    const homebase = document.getElementById('homebase');
-    let viewMidpointX = Math.floor(homebase.clientWidth/2);
-    let viewMidpointY = Math.floor(homebase.clientHeight/2);
-    let { startTop, startLeft } = characterConfigs.player;
-
-    homebase.style.visibility = 'hidden';
-    homebase.scrollLeft = startLeft - viewMidpointX + 20;  
-    setTimeout(() => {
-      homebase.scrollTop = startTop - viewMidpointY + 20;
-      homebase.style.visibility = 'visible';
-    }, 1000);
+    this.props.autoScroll(homebase);
   }
 
   //marks buildings on matrix
@@ -95,11 +55,21 @@ class Base extends Component {
     return temp;
   }
 
+  markSignCoordinates = () => {
+    let { signCoordinates } = homeBaseConfigs;
+    let temp = mapConfigs.home.slice();
+    for (let i = 0; i < signCoordinates.length; i++) {
+      let playerHomeSignCoord = signCoordinates[i][0] === 10 && signCoordinates[i][1] === 19;
+      temp[signCoordinates[i][0]][signCoordinates[i][1]] = playerHomeSignCoord ? 'home' : 'sign';
+    }
+    return temp;
+  }
+
   render() {
     let { baseMatrix } = this.state;
     return (
       <div id="homebase" className="page">
-        <div className="homebase" 
+        <div className="map" 
           style={{
             backgroundImage: `url(${homeBaseConfigs.backgroundImage})`,
           }}
