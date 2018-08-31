@@ -1,0 +1,13 @@
+#level {
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+}
+
+.levelMap {
+  height: 800px;
+  width: 800px;
+  background-repeat: no-repeat;  
+  position: relative;
+}

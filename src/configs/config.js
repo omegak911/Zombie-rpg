@@ -1,5 +1,6 @@
 import characterConfigs from './characterConfig';
 import homeBaseConfigs from './homeBaseConfig';
+import levelConfigs from './levelConfig';
 import mapConfigs from './mapConfig.js';
 import movementConfigs from './movementConfig';
 import worldMapConfigs from './worldMapConfig';
@@ -9,6 +10,7 @@ import worldMapConfigs from './worldMapConfig';
 
 export {
   characterConfigs,
+  levelConfigs,
   movementConfigs,
   mapConfigs,
   homeBaseConfigs,

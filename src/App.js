@@ -5,7 +5,7 @@ import Base from './Pages/Base/Base';
 import ConfirmTravel from './Components/Modals/ConfirmTravel/ConfirmTravel';
 import Context from './Provider/Context';
 import Inventory from './Components/Modals/Inventory/Inventory';
-import Level from './Pages/Explore/Levels';
+import Level from './Pages/Levels/Level';
 import Menu from './Components/Menu/Menu';
 import Provider from './Provider/Provider';
 import PurchaseModal from './Components/Modals/Purchase/Purchase';
@@ -106,7 +106,12 @@ class App extends Component {
                 }
                 </Context.Consumer>
               } />
-
+              <Route path='/explore' render={() =>
+                <Level 
+                  autoScroll={this.autoScroll}
+                  centerInitialViewOnPlayer={this.centerInitialViewOnPlayer}
+                />
+              } />
             </Switch>
           </Provider>
         </div>
