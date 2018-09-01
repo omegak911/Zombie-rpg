@@ -9,7 +9,8 @@ const ConfirmTravel = (props) => {
     let value = e.target.value === '1';
     let { history, selectedDestination, toggleConfirmTravel } = props;
     if (value) {
-      history.push(selectedDestination);
+      history.push('/' + selectedDestination);
+      // history.location.pathname = '/' + selectedDestination
     }
     toggleConfirmTravel(null);
   }
@@ -19,7 +20,7 @@ const ConfirmTravel = (props) => {
       {({ state }) => {
         return state.selectedDestination ?
         <div className="veilOfDarkness flexCenter flexColumn">
-          <p>Travel to {state.selectedDestination === '/' ? 'Base' : 'the Wilderness'}?</p>
+          <p>Travel to {state.selectedDestination}?</p>
           <div>
           <button value="1" onClick={confirmTravel}>Yes</button>
           <button value="0" onClick={confirmTravel}>No</button>

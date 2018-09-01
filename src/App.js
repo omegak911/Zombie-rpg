@@ -83,7 +83,7 @@ class App extends Component {
             </Context.Consumer>
             <Inventory />
             <Switch>
-              <Route exact path='/' render={() => 
+              <Route exact path='/base' render={() => 
                 <Context.Consumer>
                   {(provider) =>
                     <Base
