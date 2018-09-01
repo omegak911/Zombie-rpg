@@ -12,6 +12,8 @@ class Level extends Component {
       blockedEntrances: [],
       levelMatrix: mapConfigs.levels,
       playerEntrance: [0,0],
+      buildings: [],
+      trees: [],
     }
   }
 
@@ -20,8 +22,8 @@ class Level extends Component {
     let temp = await this.state.levelMatrix.slice();
 
     await this.assignEntrance();
-    await this.spawnStructures(); //randomly placed buildings (temp)
-    // await this.setState({ levelMatrix: temp });
+    await this.spawnStructures(temp); //randomly placed buildings (temp)
+    await this.setState({ levelMatrix: temp });
     await this.props.centerInitialViewOnPlayer(level);
   }
 
@@ -33,8 +35,35 @@ class Level extends Component {
     this.setState({ blockedEntrances: entranceCopy, playerEntrance: entrance[0] });
   }
 
-  spawnStructures = () => {
-    console.log(this.state)
+  autoScroll = () => {
+    const level = document.getElementById('level');
+    this.props.autoScroll(level);
+  }
+
+  spawnStructures = async (temp) => {
+    let { possibleBuildingLocations, possibleTreeLocations, treeBackgroundPositions } = levelConfigs;
+    let buildings = [];
+    let trees = [];
+
+    for (let i = 0; i < possibleTreeLocations.length; i++) {  //there are more tree than building locations
+      let buildingSpawnChance = Math.random() >= .5;
+      let treeSpawnChance = Math.random() >= .5;
+
+      if (i < possibleBuildingLocations.length && buildingSpawnChance) {
+        let [ row, column ] = possibleBuildingLocations[i];
+        temp[row][column] = 0;
+        buildings.push(possibleBuildingLocations[i]);
+      }
+      if (treeSpawnChance) {
+        let randomTreeImage = treeBackgroundPositions[Math.floor(Math.random() * treeBackgroundPositions.length)];
+        let [ row, column ] = possibleTreeLocations[i];
+        temp[row][column] = 0;
+        trees.push([...possibleTreeLocations[i], randomTreeImage]);
+      }
+    }
+
+    await this.setState({ buildings, trees }); //we need building image before that'll work
+
     //iterate thru possible building locations
     //use mathRandom to have 50/50 chance of generating it
 
@@ -57,14 +86,31 @@ class Level extends Component {
   }
 
   render() {
-    let { blockedEntrances, levelMatrix, playerEntrance } = this.state;
+    let { blockedEntrances, levelMatrix, playerEntrance, buildings, trees } = this.state;
     return (
       <div id="level" className="page">
-        <div className="levelMap"
+        <div className="map levelMap"
           style={{
             backgroundImage: `url(${levelConfigs.backgroundImage})`,
           }}
         >
+        {trees.map((tree, i) =>
+          <div 
+            key={i}
+            style={{
+              height: '40px',
+              width: '40px',
+              position: 'absolute',
+              backgroundImage: `url(${levelConfigs.treeImages})`,
+              backgroundPosition: tree[2],
+              backgroundRepeat: 'no-repeat',
+              top: tree[0] * 40,
+              left: tree[1] * 40,
+            }}>
+          </div>
+        )
+
+        }
         {blockedEntrances.map((coord,i) =>
           <div key={i}>
             <div style={{ 
@@ -95,7 +141,7 @@ class Level extends Component {
           <Context.Consumer>
             {(provider) =>
               <CharacterModel 
-                autoScroll={this.props.autoScroll} 
+                autoScroll={this.autoScroll} 
                 baseMatrix={levelMatrix} 
                 characterType="player"
                 handleSignClick={provider.handleSignClick}  
