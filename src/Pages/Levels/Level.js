@@ -41,6 +41,7 @@ class Level extends Component {
   }
 
   spawnStructures = async (temp) => {
+    let { blockedEntrances } = this.state;
     let { possibleBuildingLocations, possibleTreeLocations, treeBackgroundPositions } = levelConfigs;
     let buildings = [];
     let trees = [];
@@ -49,6 +50,11 @@ class Level extends Component {
       let buildingSpawnChance = Math.random() >= .5;
       let treeSpawnChance = Math.random() >= .5;
 
+      if (i < 3) {
+        let [ rowOne, columnOne, rowTwo, columnTwo ] = blockedEntrances[i];
+        temp[rowOne][columnOne] = 0;
+        temp[rowTwo][columnTwo] = 0;
+      }
       if (i < possibleBuildingLocations.length && buildingSpawnChance) {
         let [ row, column ] = possibleBuildingLocations[i];
         temp[row][column] = 0;
@@ -89,7 +95,7 @@ class Level extends Component {
     let { blockedEntrances, levelMatrix, playerEntrance, buildings, trees } = this.state;
     return (
       <div id="level" className="page">
-        <div className="map levelMap"
+        <div className="levelMap"
           style={{
             backgroundImage: `url(${levelConfigs.backgroundImage})`,
           }}

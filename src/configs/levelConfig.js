@@ -23,9 +23,9 @@ const levelConfigs = {
   treeImages: Trees,
   treeBackgroundPositions: [
     '0px 0px',
-    '0px 41px',
-    '41px 0px',
-    '41px 41px',
+    '0px -40px',
+    '-40px 0px',
+    '-40px -40px',
   ],
 
 }
