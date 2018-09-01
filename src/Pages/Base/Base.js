@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import CharacterModel from '../../Components/CharacterModel/CharacterModel';
-// import { Context } from '../../Provider/Provider';
 import Context from '../../Provider/Context';
 import { characterConfigs, homeBaseConfigs, mapConfigs } from '../../configs/config';
 import './Base.css';
@@ -26,6 +25,16 @@ class Base extends Component {
     await this.props.centerInitialViewOnPlayer(homebase);
   }
 
+  async shouldComponentUpdate() {
+    let { baseProgressUpdated, baseProgressUpdatedFalse } = this.props;
+    if (baseProgressUpdated) {
+      await baseProgressUpdatedFalse();
+      let temp = await this.markSignCoordinates();
+      await this.markBuildingCoordinates(temp);
+      await this.setState({ baseMatrix: temp });
+    }
+  }
+
   autoScroll = () => {
     const homebase = document.getElementById('homebase');
     this.props.autoScroll(homebase);
@@ -34,6 +43,7 @@ class Base extends Component {
   //marks buildings on matrix
   markBuildingCoordinates = (temp) => {
     let { playerBaseProgress } = this.props;
+    console.log(playerBaseProgress)
     for (let building in playerBaseProgress) {
       let [row, column] = playerBaseProgress[building].coord;
 

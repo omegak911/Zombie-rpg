@@ -37,6 +37,7 @@ class Provider extends Component {
         zombiesKilled: 0,
         worldMapProgress: 1,
       },
+      baseProgressUpdated: false,
       menuCoord: [0,0],
       showInventory: false,
       currentSign: null,
@@ -54,10 +55,14 @@ class Provider extends Component {
     console.log(playerData);
     //update baseProgress
     if (playerData) {
-      await this.setState({ player: playerData });
+      await this.setState({ player: playerData, baseProgressUpdated: true });
     }
     //then update nextBuildingAvailable
     await this.updateNextBuildingAvailable();
+  }
+
+  baseProgressUpdatedFalse = () => {
+    this.setState({ baseProgressUpdated: false })
   }
 
   updateNextBuildingAvailable = () => {
@@ -123,7 +128,7 @@ class Provider extends Component {
         }
         playerData.coin = coin;
         nextBuildingAvailableData[currentSign] = propsOfNextBuilding;
-        await this.setState({ playerData, nextBuildingAvailableData });
+        await this.setState({ baseProgressUpdated: true, playerData, nextBuildingAvailableData });
         console.log(playerData)
       } else {
         //setState explain to the player they do not have enough coin
@@ -180,6 +185,7 @@ class Provider extends Component {
           setCurrentSignNull: this.setCurrentSignNull,
           toggleConfirmTravel: this.toggleConfirmTravel,
           history: this.props.history,
+          baseProgressUpdatedFalse: this.baseProgressUpdatedFalse,
         }}>
         {this.props.children}
       </Context.Provider>

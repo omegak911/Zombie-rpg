@@ -19,14 +19,14 @@ class App extends Component {
 
   //view will auto-scroll depending on player position
   autoScroll = (element) => {
-    let { clientHeight: height, clientWidth: width } = document.getElementsByClassName('map')[0];
+    let { clientHeight: height, clientWidth: width } = element.children[0];
     const player = document.getElementsByClassName('player')[0];
     let { offsetLeft, offsetTop } = player;
     let { clientWidth, clientHeight, scrollLeft, scrollTop } = element;    
 
     let playerIs = {
       tooCloseToTop: (offsetTop < (scrollTop + (clientHeight * .3))) && scrollTop > 0,
-      tooCloseToBottom: (offsetTop + 40 > (scrollTop + clientHeight - (clientHeight * .3))) && scrollTop < height - clientHeight,
+      tooCloseToBottom: (offsetTop + 40 > (scrollTop + clientHeight - (clientHeight * .3))) && scrollTop + 2 < height - clientHeight,
       tooCloseToLeft: (offsetLeft < (scrollLeft + (clientWidth * .3))) && scrollLeft > 0,
       tooCloseToRight: (offsetLeft + 40 > (scrollLeft + clientWidth - (clientWidth * .3))) && scrollLeft < width - clientWidth,
     }
@@ -91,6 +91,8 @@ class App extends Component {
                       updateMenuCoord={provider.updateMenuCoord}
                       centerInitialViewOnPlayer={this.centerInitialViewOnPlayer}
                       autoScroll={this.autoScroll}
+                      baseProgressUpdatedFalse={provider.baseProgressUpdatedFalse}
+                      baseProgressUpdated={provider.state.baseProgressUpdated}
                     />
                   }
                 </Context.Consumer>
