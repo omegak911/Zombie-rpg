@@ -128,8 +128,7 @@ class Provider extends Component {
         }
         playerData.coin = coin;
         nextBuildingAvailableData[currentSign] = propsOfNextBuilding;
-        await this.setState({ baseProgressUpdated: true, playerData, nextBuildingAvailableData });
-        console.log(playerData)
+        await this.setState({ baseProgressUpdated: true, player: playerData, nextBuildingAvailableData });
       } else {
         //setState explain to the player they do not have enough coin
         //have an ok button to exit;
