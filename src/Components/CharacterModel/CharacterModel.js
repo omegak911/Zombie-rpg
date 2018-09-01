@@ -9,10 +9,10 @@ class CharacterModel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      top: player.startTop,
-      left: player.startLeft,
-      startX: player.startColumn,
-      startY: player.startRow,
+      top: 0,
+      left: 0,
+      startX: 0,
+      startY: 0,
       playerSprites: player.spriteCrop,
       playerFacingDirection: [player.startRow + 1, player.startColumn],
       npcSprites: {
@@ -28,9 +28,10 @@ class CharacterModel extends Component {
   }
 
   componentDidMount() {
-    const { characterType } = this.props;
-    
+    const { characterType, startTop, startLeft, startColumn, startRow } = this.props;
+    console.log(this.props)
     if (characterType === 'player') {
+      this.setState({ top: startTop, left: startLeft, startX: startColumn, startY: startRow });
       window.addEventListener('keydown', this.handleKeyPress);
     } else {
       let { startX, startY, top, left } = this.props.startCoord;

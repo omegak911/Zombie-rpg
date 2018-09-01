@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import CharacterModel from '../../Components/CharacterModel/CharacterModel';
 // import { Context } from '../../Provider/Provider';
 import Context from '../../Provider/Context';
-import { homeBaseConfigs, mapConfigs } from '../../configs/config';
+import { characterConfigs, homeBaseConfigs, mapConfigs } from '../../configs/config';
 import './Base.css';
 
 class Base extends Component {
@@ -67,6 +67,7 @@ class Base extends Component {
 
   render() {
     let { baseMatrix } = this.state;
+    let { player } = characterConfigs;
     return (
       <div id="homebase" className="page">
         <div className="map" 
@@ -82,6 +83,10 @@ class Base extends Component {
                 characterType="player"
                 handleSignClick={provider.handleSignClick}  
                 toggleConfirmTravel={provider.toggleConfirmTravel}
+                startTop={player.startTop}
+                startLeft={player.startLeft}
+                startColumn={player.startColumn}
+                startRow={player.startRow}
                 />
             }
           </Context.Consumer>

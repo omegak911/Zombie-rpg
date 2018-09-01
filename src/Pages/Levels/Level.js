@@ -1,24 +1,26 @@
 import React, { Component } from 'react';
+import CharacterModel from '../../Components/CharacterModel/CharacterModel';
 
+import Context from '../../Provider/Context';
 import { levelConfigs, mapConfigs } from '../../configs/config';
 import './Level.css'
-class LevelOne extends Component {
+class Level extends Component {
   constructor(props) {
     super(props);
     this.state = {
       entrances: [[0,9,0,10],[9,0,10,0],[9,19,10,19],[19,9,19,10]],
       blockedEntrances: [],
       levelMatrix: mapConfigs.levels,
-      playerEntrance: [],
+      playerEntrance: [0,0],
     }
   }
 
   async componentDidMount() {
     let level = document.getElementById('level');
+    let temp = await this.state.levelMatrix.slice();
 
     await this.assignEntrance();
-    // let temp = this.state.levelMatrix.slice();
-    // await this.spawnStructures(temp); //randomly placed buildings
+    await this.spawnStructures(); //randomly placed buildings (temp)
     // await this.setState({ levelMatrix: temp });
     // await this.props.centerInitialViewOnPlayer(level);
   }
@@ -28,11 +30,11 @@ class LevelOne extends Component {
     let randomIndex = Math.floor(Math.random() * 4);
     let entrance = entranceCopy.splice(randomIndex,1);
 
-    this.setState({ blockedEntrances: entranceCopy });
+    this.setState({ blockedEntrances: entranceCopy, playerEntrance: entrance[0] });
   }
 
   spawnStructures = () => {
-
+    console.log(this.state)
     //iterate thru possible building locations
     //use mathRandom to have 50/50 chance of generating it
 
@@ -55,7 +57,7 @@ class LevelOne extends Component {
   }
 
   render() {
-    let { blockedEntrances } = this.state;
+    let { blockedEntrances, levelMatrix, playerEntrance } = this.state;
     return (
       <div id="level" className="page">
         <div className="levelMap"
@@ -63,8 +65,8 @@ class LevelOne extends Component {
             backgroundImage: `url(${levelConfigs.backgroundImage})`,
           }}
         >
-        {blockedEntrances.map(coord =>
-          <div>
+        {blockedEntrances.map((coord,i) =>
+          <div key={i}>
             <div style={{ 
               position: 'absolute',
               backgroundImage: `url(${levelConfigs.treeImages})`,
@@ -89,10 +91,27 @@ class LevelOne extends Component {
             </div>
           </div>
         )}
+        {playerEntrance.length > 2 &&
+          <Context.Consumer>
+            {(provider) =>
+              <CharacterModel 
+                autoScroll={this.props.autoScroll} 
+                baseMatrix={levelMatrix} 
+                characterType="player"
+                handleSignClick={provider.handleSignClick}  
+                toggleConfirmTravel={provider.toggleConfirmTravel}
+                startTop={playerEntrance[0] * 40}
+                startLeft={playerEntrance[1] * 40}
+                startColumn={playerEntrance[1]}
+                startRow={playerEntrance[0]}
+                />
+            }
+          </Context.Consumer>
+        }
         </div>
       </div>
     )
   }
 }
 
-export default LevelOne;
+export default Level;
