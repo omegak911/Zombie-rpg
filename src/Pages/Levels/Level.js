@@ -22,7 +22,7 @@ class Level extends Component {
     await this.assignEntrance();
     await this.spawnStructures(); //randomly placed buildings (temp)
     // await this.setState({ levelMatrix: temp });
-    // await this.props.centerInitialViewOnPlayer(level);
+    await this.props.centerInitialViewOnPlayer(level);
   }
 
   assignEntrance = () => {
