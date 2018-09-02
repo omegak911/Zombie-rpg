@@ -1,4 +1,5 @@
 import Trees from '../assets/buildings/Trees.png';
+import Buildings from '../assets/buildings/LevelBuildings.png';
 import backgroundImage from '../assets/maps/Level.png';
 
 const levelConfigs = {
@@ -27,6 +28,11 @@ const levelConfigs = {
     '-40px 0px',
     '-40px -40px',
   ],
+  buildingImages: Buildings,
+  buildingBackgroundPositions: [
+    '0px 0px',
+    '-120px 0px',
+  ]
 
 }
 

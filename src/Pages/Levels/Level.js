@@ -42,12 +42,12 @@ class Level extends Component {
 
   spawnStructures = async (temp) => {
     let { blockedEntrances } = this.state;
-    let { possibleBuildingLocations, possibleTreeLocations, treeBackgroundPositions } = levelConfigs;
+    let { possibleBuildingLocations, possibleTreeLocations, treeBackgroundPositions, buildingBackgroundPositions } = levelConfigs;
     let buildings = [];
     let trees = [];
 
-    for (let i = 0; i < possibleTreeLocations.length; i++) {  //there are more tree than building locations
-      let buildingSpawnChance = Math.random() >= .5;
+    for (let i = 0; i < possibleTreeLocations.length; i++) {
+      let buildingSpawnChance = Math.random() >= .4;
       let treeSpawnChance = Math.random() >= .5;
 
       if (i < 3) {
@@ -56,9 +56,14 @@ class Level extends Component {
         temp[rowTwo][columnTwo] = 0;
       }
       if (i < possibleBuildingLocations.length && buildingSpawnChance) {
+        let randomBuildingImage = buildingBackgroundPositions[Math.floor(Math.random() * buildingBackgroundPositions.length)];
         let [ row, column ] = possibleBuildingLocations[i];
-        temp[row][column] = 0;
-        buildings.push(possibleBuildingLocations[i]);
+        for (let i = row; i < row + 3; i++) {
+          for (let k = column; k < column + 3; k++) {
+            temp[i][k] = 0;
+          }
+        }
+        buildings.push([...possibleBuildingLocations[i], randomBuildingImage]);
       }
       if (treeSpawnChance) {
         let randomTreeImage = treeBackgroundPositions[Math.floor(Math.random() * treeBackgroundPositions.length)];
@@ -67,15 +72,10 @@ class Level extends Component {
         trees.push([...possibleTreeLocations[i], randomTreeImage]);
       }
     }
-
-    await this.setState({ buildings, trees }); //we need building image before that'll work
-
-    //iterate thru possible building locations
-    //use mathRandom to have 50/50 chance of generating it
-
-
-
-    // with randomly generated buildings | we'll want to have designated spots so there's no conflict
+    await this.setState({ buildings, trees });
+  }
+  
+  spawnZombies = () => {
     // randomly generated number of zombies 5-20
     // random 20% chance for 1-2 dead soldiers with loot
     // if zombies are still in the area, there's a 50% chance of running into a zombie when trying to escape
@@ -84,10 +84,6 @@ class Level extends Component {
     
     // zombie level will be associated with the one clicked
     // randomly assign exit | probably have an array of arrays with coordinates of possible exits with Math.random index
-    
-  }
-
-  spawnZombies = () => {
     //randomly pick row/column (20x20).  Cooresponding top/left will be x40
   }
 
@@ -100,7 +96,22 @@ class Level extends Component {
             backgroundImage: `url(${levelConfigs.backgroundImage})`,
           }}
         >
-        {trees.map((tree, i) =>
+        {buildings.map((building,i) =>
+          <div
+            key={i}
+            style={{
+              height: '120px',
+              width: '120px',
+              position: 'absolute',
+              backgroundImage: `url(${levelConfigs.buildingImages})`,
+              backgroundPosition: building[2],
+              backgroundRepeat: 'no-repeat',
+              top: building[0] * 40,
+              left: building[1] * 40,
+            }}>
+          </div>
+        )}
+        {trees.map((tree,i) =>
           <div 
             key={i}
             style={{
