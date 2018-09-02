@@ -29,7 +29,6 @@ class CharacterModel extends Component {
 
   componentDidMount() {
     const { characterType, startTop, startLeft, startColumn, startRow } = this.props;
-    console.log(this.props)
     if (characterType === 'player') {
       this.setState({ top: startTop, left: startLeft, startX: startColumn, startY: startRow });
       window.addEventListener('keydown', this.handleKeyPress);
@@ -41,7 +40,6 @@ class CharacterModel extends Component {
         let { directions } = this.state;
         let randomIndex = Math.floor(Math.random() * 4);
         let direction = directions[randomIndex];
-
         if (this.checkDirectionValidity(direction)) {
           this.handleDirectionChange(direction);
         }

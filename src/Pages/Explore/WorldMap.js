@@ -24,12 +24,12 @@ class WorldMap extends Component {
 
   handleClick = (level) => {
     let { toggleConfirmTravel, worldMapProgress } = this.props;
-    let selectedDestination = level === 0 ? 'base' : 'explore/' + level;
+    let selectedDestination = level === 0 ? 'base' : 'explore';
 
     if (worldMapProgress < level) {
       console.log('you are too weak modal.  Come back later');
     } else {
-      toggleConfirmTravel(selectedDestination);
+      toggleConfirmTravel(selectedDestination, level);
     }
   }
   

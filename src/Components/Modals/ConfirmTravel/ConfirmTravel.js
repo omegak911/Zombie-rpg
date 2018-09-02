@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Context } from '../../../Provider/Provider';
 import Context from '../../../Provider/Context';
 
 const ConfirmTravel = (props) => {
@@ -10,9 +9,8 @@ const ConfirmTravel = (props) => {
     let { history, selectedDestination, toggleConfirmTravel } = props;
     if (value) {
       history.push('/' + selectedDestination);
-      // history.location.pathname = '/' + selectedDestination
     }
-    toggleConfirmTravel(null);
+    toggleConfirmTravel(null, null);
   }
 
   return (

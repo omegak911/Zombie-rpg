@@ -46,6 +46,7 @@ class Provider extends Component {
         //check baseProgress and provide next level info
       },
       selectedDestination: null,
+      selectedDestinationLevel: null,
 
     }
   }
@@ -89,9 +90,8 @@ class Provider extends Component {
     this.setState({ nextBuildingAvailable });
   }
 
-  toggleConfirmTravel = (selectedDestination) => {
-    this.setState({ selectedDestination });
-    console.log(this.props)
+  toggleConfirmTravel = (selectedDestination, level) => {
+    this.setState({ selectedDestination, selectedDestinationLevel: level });
   }
 
   handlePurchaseOption = async (e) => {
