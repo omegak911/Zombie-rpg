@@ -1,8 +1,8 @@
 #characterModel {
   position: absolute;
-}
-
-#characterModel {
   height: 40px;
   width: 40px;
+  transition-property: top, bottom, left, right; 
+  transition-duration: 0.5s; 
+  transition-timing-function: ease;
 }

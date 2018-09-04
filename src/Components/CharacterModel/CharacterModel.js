@@ -72,6 +72,7 @@ class CharacterModel extends Component {
 
       this.setState({ startX, startY, top, left, stats });
 
+      let randomSpeed = 500 + Math.random() * 1500;
       this.interval = setInterval(() => {
         let { directions } = this.state;
         let randomIndex = Math.floor(Math.random() * 4);
@@ -79,7 +80,7 @@ class CharacterModel extends Component {
         if (this.checkDirectionValidity(direction)) {
           this.handleCssChange(direction);
         }
-      }, 2000);
+      }, randomSpeed);
     }
   }
 
