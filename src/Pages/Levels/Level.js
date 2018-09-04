@@ -165,6 +165,7 @@ class Level extends Component {
                 autoScroll={this.autoScroll} 
                 baseMatrix={levelMatrix} 
                 characterType="player"
+                type="player"
                 handleSignClick={provider.handleSignClick}  
                 toggleConfirmTravel={provider.toggleConfirmTravel}
                 startTop={playerEntrance[0] * 40}
@@ -197,7 +198,9 @@ class Level extends Component {
           return (
             <CharacterModel 
               baseMatrix={levelMatrix} 
-              characterType={monster} 
+              characterType={monster}
+              type="monster"
+              index={i}
               key={i}
               level={level} 
               startCoord={{ startX: randomStartX, startY: randomStartY, top: randomStartY * 40, left: randomStartX * 40 }}

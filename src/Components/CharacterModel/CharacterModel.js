@@ -38,7 +38,7 @@ class CharacterModel extends Component {
         health: 20,
         exp: 1,
         loot: [],
-      }
+      },
     }
   }
 
@@ -65,6 +65,10 @@ class CharacterModel extends Component {
         }
       }
 
+      // if (baseMatrix[startY][startX]) { //if they didn't spawn on a building
+      //   baseMatrix[startY][startX] = 'monster'
+      // }
+
       this.setState({ startX, startY, top, left, stats });
 
       this.interval = setInterval(() => {
@@ -72,7 +76,7 @@ class CharacterModel extends Component {
         let randomIndex = Math.floor(Math.random() * 4);
         let direction = directions[randomIndex];
         if (this.checkDirectionValidity(direction)) {
-          this.handleDirectionChange(direction);
+          this.handleCssChange(direction);
         }
       }, 2000);
     }
@@ -92,8 +96,11 @@ class CharacterModel extends Component {
   checkDirectionValidity = (direction) => {
     const { baseMatrix, characterType, toggleConfirmTravel } = this.props;
     const [ x, y, directionIndex, facingCoord ] = this.directionConverter(direction);
-    if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length && (baseMatrix[y][x] === 1 || baseMatrix[y][x] === 'worldmap')) {
+    if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length && 
+      (baseMatrix[y][x] === 1 || baseMatrix[y][x] === 'worldmap' || baseMatrix[y][x] === 'player' || baseMatrix[y][x] === 'monster')) {
+      this.checkCollisionMarkPosition(y,x);
       this.setState({ startX: x, startY: y, directionIndex, throttle: true, playerFacingDirection: facingCoord });
+
       if (baseMatrix[y][x] === 'worldmap' && characterType === 'player') {
         toggleConfirmTravel('worldmap');
       }
@@ -130,7 +137,7 @@ class CharacterModel extends Component {
     return [startX, startY, newDirectionIndex, [facingY, facingX]];
   }
 
-  handleDirectionChange = (direction, currentDate) => {
+  handleCssChange = (direction, currentDate) => {
     const calculations = {
       ArrowUp: this.state.top - movementConfigs.vertical,
       ArrowDown: this.state.top + movementConfigs.vertical,
@@ -179,17 +186,33 @@ class CharacterModel extends Component {
 
     if (value === 'a') {
       let { coordinate, whatIsInFront} = this.isPlayerFacingSign();
+      console.log(this.props.baseMatrix)
       if (isNaN(whatIsInFront)) {
         this.props.handleSignClick(coordinate, whatIsInFront);
       }
       console.log(whatIsInFront)
     } else if (isDirection[value] && throttler && this.checkDirectionValidity(value)) {
-      this.handleDirectionChange(value, currentDate);
+      this.handleCssChange(value, currentDate);
       autoScroll();
     }
 
     // let { startX, startY, top, left } = this.state; 
     // console.log(`column: ${startX}`, `row: ${startY}`, `top: ${top}`, `left: ${left}`)
+  }
+
+  checkCollisionMarkPosition = (y,x) => {
+    let { type, baseMatrix } = this.props;
+    let { startX, startY } = this.state;
+    let checkingFor = type === 'player' ? 'monster' : 'player';
+
+    if (baseMatrix[y][x] !== 'worldmap') {
+      if (baseMatrix[y][x] === checkingFor) {
+        console.log('collision');
+   
+      }
+      baseMatrix[startY][startX] = 1;
+      baseMatrix[y][x] = type;
+    }
   }
 
   render() {
