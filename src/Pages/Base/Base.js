@@ -22,7 +22,7 @@ class Base extends Component {
     await this.markBuildingCoordinates(temp);
     await this.props.updateMenuCoord([offsetTop, menuLeft])
     await this.setState({ baseMatrix: temp });
-    await this.props.centerInitialViewOnPlayer(homebase);
+    await setTimeout(() => this.props.centerInitialViewOnPlayer(homebase), 0);
   }
 
   async shouldComponentUpdate() {
