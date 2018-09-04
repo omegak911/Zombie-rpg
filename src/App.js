@@ -48,7 +48,6 @@ class App extends Component {
     let viewMidpointY = Math.floor(element.clientHeight/2);
 
     const { offsetTop, offsetLeft } = document.getElementsByClassName('player')[0];
-
     element.style.visibility = 'hidden';
     element.scrollLeft = offsetLeft - viewMidpointX + 20;  
     setTimeout(() => {

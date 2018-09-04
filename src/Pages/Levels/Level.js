@@ -26,7 +26,6 @@ class Level extends Component {
 
     await this.assignEntrance();
     await this.spawnStructures(temp); //randomly placed buildings (temp)
-    await this.setState({ levelMatrix: temp, mapUpdated: true });
     await this.props.centerInitialViewOnPlayer(level);
   }
 
@@ -75,7 +74,7 @@ class Level extends Component {
         trees.push([...possibleTreeLocations[i], randomTreeImage]);
       }
     }
-    await this.setState({ buildings, trees });
+    await this.setState({ buildings, trees, levelMatrix: temp, mapUpdated: true });
   }
   
   spawnZombies = () => {
@@ -199,7 +198,7 @@ class Level extends Component {
             <CharacterModel 
               baseMatrix={levelMatrix} 
               characterType={monster}
-              type="monster"
+              type={`monster|${i}`}
               index={i}
               key={i}
               level={level} 

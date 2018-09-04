@@ -91,6 +91,7 @@ class Base extends Component {
                 autoScroll={this.autoScroll} 
                 baseMatrix={baseMatrix} 
                 characterType="player"
+                type="player"
                 handleSignClick={provider.handleSignClick}  
                 toggleConfirmTravel={provider.toggleConfirmTravel}
                 startTop={player.startTop}
@@ -101,10 +102,10 @@ class Base extends Component {
                 />
             }
           </Context.Consumer>
-          <CharacterModel baseMatrix={baseMatrix} characterType="npcMan" level={1} startCoord={{ startX: 21, startY: 10, top: 400, left: 840 }}/>
-          <CharacterModel baseMatrix={baseMatrix} characterType="npcWoman" level={1} startCoord={{ startX: 28, startY: 7, top: 280, left: 1120 }}/>
-          <CharacterModel baseMatrix={baseMatrix} characterType="npcGirl" level={1} startCoord={{ startX: 11, startY: 4, top: 160, left: 440 }}/>
-          <CharacterModel baseMatrix={baseMatrix} characterType="npcBoy" level={1} startCoord={{ startX: 32, startY: 7, top: 280, left: 1280 }}/>
+          <CharacterModel baseMatrix={baseMatrix} characterType="npcMan" level={1} type="npc" startCoord={{ startX: 21, startY: 10, top: 400, left: 840 }}/>
+          <CharacterModel baseMatrix={baseMatrix} characterType="npcWoman" level={1} type="npc" startCoord={{ startX: 28, startY: 7, top: 280, left: 1120 }}/>
+          <CharacterModel baseMatrix={baseMatrix} characterType="npcGirl" level={1} type="npc" startCoord={{ startX: 11, startY: 4, top: 160, left: 440 }}/>
+          <CharacterModel baseMatrix={baseMatrix} characterType="npcBoy" level={1} type="npc" startCoord={{ startX: 32, startY: 7, top: 280, left: 1280 }}/>
           <Context.Consumer>
             {({ state }) => {
               let { baseProgress } = state.player;

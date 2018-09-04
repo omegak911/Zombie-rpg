@@ -96,12 +96,18 @@ class CharacterModel extends Component {
   }
 
   checkDirectionValidity = (direction) => {
-    const { baseMatrix, characterType, toggleConfirmTravel } = this.props;
+    const { baseMatrix, characterType, toggleConfirmTravel, type } = this.props;
     const [ x, y, directionIndex, facingCoord ] = this.directionConverter(direction);
-    if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length && 
-      (baseMatrix[y][x] === 1 || baseMatrix[y][x] === 'worldmap' || baseMatrix[y][x] === 'player' || baseMatrix[y][x] === 'monster')) {
-      this.checkCollisionMarkPosition(y,x);
-      this.setState({ startX: x, startY: y, directionIndex, throttle: true, playerFacingDirection: facingCoord });
+    if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length) {
+      let val = baseMatrix[y][x];
+      val = typeof val === 'string' ? val.split('|')[0] : val;
+      
+      if (val === 1 || val === 'worldmap' || val === 'player' || val === 'monster') {
+        this.checkCollisionMarkPosition(y,x);
+        this.setState({ startX: x, startY: y, directionIndex, throttle: true, playerFacingDirection: facingCoord });
+      } else {
+        return false
+      }
 
       if (baseMatrix[y][x] === 'worldmap' && characterType === 'player') {
         toggleConfirmTravel('worldmap');
@@ -110,7 +116,6 @@ class CharacterModel extends Component {
     } else {
       return false;
     }
-
   }
 
   directionConverter = (direction) => {
@@ -206,15 +211,26 @@ class CharacterModel extends Component {
     let { type, baseMatrix } = this.props;
     let { startX, startY } = this.state;
     let checkingFor = type === 'player' ? 'monster' : 'player';
+    let nextVal = baseMatrix[y][x];
+    let prevVal = baseMatrix[startY][startX];
 
-    if (baseMatrix[y][x] !== 'worldmap') {
-      if (baseMatrix[y][x] === checkingFor) {
+    if (nextVal === 'worldmap' && prevVal === 'worldmap') {
+      return;
+    }
+    if (type === 'player') {
+      nextVal = nextVal[0] === 'm' ? 'monster' : nextVal;
+      prevVal = prevVal[0] === 'm' ? 'monster' : prevVal;
+    }
+    if (nextVal !== 'worldmap') {
+      if (nextVal === checkingFor) {
         console.log('collision incoming position');
+        //send type and && baseMatrix[y][x] to provider func and change page
         baseMatrix[startY][startX] = 1;
-      } else if (baseMatrix[startY][startX] === checkingFor) {
+      } else if (prevVal === checkingFor) {
         console.log('collision prev position');
+        //send type and && baseMatrix[startY][startX] to provider func and change page
         baseMatrix[y][x] = type;
-      } else {
+      } else if (prevVal !== 'worldmap'){
         baseMatrix[startY][startX] = 1;
         baseMatrix[y][x] = type;
       }
