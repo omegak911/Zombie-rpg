@@ -14,6 +14,9 @@ class Level extends Component {
       playerEntrance: [0,0],
       buildings: [],
       trees: [],
+      numberOfEnemies: new Array(10 + Math.floor(Math.random() * 20)).fill(1),
+      monsters: ['Lil Zom', 'Zom', 'Red Eyes White Skull', 'Skeleton', 'War Zom', 'Brute Zom'],
+      mapUpdated: false,
     }
   }
 
@@ -23,7 +26,7 @@ class Level extends Component {
 
     await this.assignEntrance();
     await this.spawnStructures(temp); //randomly placed buildings (temp)
-    await this.setState({ levelMatrix: temp });
+    await this.setState({ levelMatrix: temp, mapUpdated: true });
     await this.props.centerInitialViewOnPlayer(level);
   }
 
@@ -88,7 +91,8 @@ class Level extends Component {
   }
 
   render() {
-    let { blockedEntrances, levelMatrix, playerEntrance, buildings, trees } = this.state;
+    let { blockedEntrances, levelMatrix, mapUpdated, monsters, numberOfEnemies, playerEntrance, buildings, trees } = this.state;
+    let { level } = this.props;
     return (
       <div id="level" className="page">
         <div className="levelMap"
@@ -154,7 +158,7 @@ class Level extends Component {
             </div>
           </div>
         )}
-        {playerEntrance.length > 2 &&
+        {mapUpdated &&
           <Context.Consumer>
             {(provider) =>
               <CharacterModel 
@@ -171,6 +175,34 @@ class Level extends Component {
             }
           </Context.Consumer>
         }
+        {mapUpdated && numberOfEnemies.map((num,i) => {
+          let allowedIndexes = 0;
+          if (level > 4) {
+            allowedIndexes += 1;
+          }
+          if (level > 9) {
+            allowedIndexes += 1;
+          }
+          if (level > 14) {
+            allowedIndexes += 1;
+          }
+          if (level > 19) {
+            allowedIndexes += 1;
+          }
+          let randomIndex = Math.floor(Math.random() * allowedIndexes);
+          let monster = monsters[randomIndex];
+          let randomStartX = 1 + Math.floor(Math.random() * 18);
+          let randomStartY = 1 + Math.floor(Math.random() * 18);
+
+          return (
+            <CharacterModel 
+              baseMatrix={levelMatrix} 
+              characterType={monster} 
+              key={i}
+              level={level} 
+              startCoord={{ startX: randomStartX, startY: randomStartY, top: randomStartY * 40, left: randomStartX * 40 }}
+            />
+        )})}
         </div>
       </div>
     )
