@@ -16,20 +16,24 @@ class Provider extends Component {
 
         },
         coin: 10000,
-        defense: 5,
-        dmg: 1,
+        stats: {  
+          attack: 5,
+          defense: 3,
+          exp: 0,
+          expToNextLevel: 100,
+          health: 30,
+          level: 1,
+          name: '',
+          statPoints: 0
+        },
         equipment: {
   
         },
-        exp: 0,
-        hp: 30,
         inventory: {
           size: ['','','','',''],
           //items go here along with quantity
           //limit to 5, increase with bigger bags in 5s, up to 30
         },
-        level: 1,
-        name: '',
         storage: {
           //items go here along with quantity
         },
@@ -47,7 +51,6 @@ class Provider extends Component {
       },
       selectedDestination: null,
       selectedDestinationLevel: null,
-
     }
   }
 

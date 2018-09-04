@@ -109,10 +109,15 @@ class App extends Component {
                 </Context.Consumer>
               } />
               <Route path='/explore' render={() =>
-                <Level 
-                  autoScroll={this.autoScroll}
-                  centerInitialViewOnPlayer={this.centerInitialViewOnPlayer}
-                />
+                <Context.Consumer>
+                {(provider) =>
+                  <Level 
+                    autoScroll={this.autoScroll}
+                    centerInitialViewOnPlayer={this.centerInitialViewOnPlayer}
+                    level={provider.state.selectedDestinationLevel}
+                  />
+                }
+                </Context.Consumer>
               } />
             </Switch>
           </Provider>
