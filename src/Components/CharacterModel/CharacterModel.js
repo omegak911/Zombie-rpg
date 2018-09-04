@@ -21,20 +21,51 @@ class CharacterModel extends Component {
         npcGirl: characterConfigs.npcGirl.spriteCrop,
         npcBoy: characterConfigs.npcBoy.spriteCrop,
       },
+      monsterSprites: {
+        'Lil Zom': characterConfigs['Lil Zom'].spriteCrop,
+        'Zom': characterConfigs['Zom'].spriteCrop,
+        'Red Eyes White Skull': characterConfigs['Red Eyes White Skull'].spriteCrop,
+        'Skeleton': characterConfigs['Skeleton'].spriteCrop,
+        'War Zom': characterConfigs['War Zom'].spriteCrop,
+        'Brute Zom': characterConfigs['Brute Zom'].spriteCrop,
+      },
       directions: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'],
       directionIndex: 0,
       throttle: Date.now(),
+      stats: {
+        attack: 5,
+        defense: 3,
+        health: 20,
+        exp: 1,
+        loot: [],
+      }
     }
   }
 
   componentDidMount() {
-    const { characterType, startTop, startLeft, startColumn, startRow } = this.props;
+    const { characterType, startTop, startLeft, startColumn, startRow, stats } = this.props;
     if (characterType === 'player') {
-      this.setState({ top: startTop, left: startLeft, startX: startColumn, startY: startRow });
+      this.setState({ top: startTop, left: startLeft, startX: startColumn, startY: startRow, stats });
       window.addEventListener('keydown', this.handleKeyPress);
     } else {
       let { startX, startY, top, left } = this.props.startCoord;
-      this.setState({ startX, startY, top, left });
+      let { characterType, level } = this.props;
+      let  stats = characterConfigs[characterType].stats;
+      let totalStatPoints = 5 * (level - 1);
+
+      for (let stat in stats) {
+        if (stat === 'exp') {
+          stats[stat] = stats[stat] * level;
+        } else if (stat === 'health') {
+          stats[stat] += (totalStatPoints*5);
+        } else {
+          let randomStatPoints = Math.floor(Math.random() * totalStatPoints);
+          stats[stat] += randomStatPoints;
+          totalStatPoints -= randomStatPoints;
+        }
+      }
+
+      this.setState({ startX, startY, top, left, stats });
 
       this.interval = setInterval(() => {
         let { directions } = this.state;
@@ -55,6 +86,7 @@ class CharacterModel extends Component {
     if (this.interval) {
       clearInterval(this.interval);
     }
+    console.log(this.state)
   }
 
   checkDirectionValidity = (direction) => {
@@ -69,6 +101,7 @@ class CharacterModel extends Component {
     } else {
       return false;
     }
+
   }
 
   directionConverter = (direction) => {
@@ -161,8 +194,8 @@ class CharacterModel extends Component {
 
   render() {
     let { characterType } = this.props;
-    let { top, left, playerSprites, npcSprites, directionIndex} = this.state;
-    let sprites = characterType === 'player' ? playerSprites : npcSprites[characterType];
+    let { top, left, playerSprites, npcSprites, monsterSprites, directionIndex} = this.state;
+    let sprites = characterType === 'player' ? playerSprites : npcSprites[characterType] ? npcSprites[characterType] : monsterSprites[characterType];
     let classN = characterType === 'player' ? 'player' : 'npc';
     return (
       <div id="characterModel" className={classN} autoFocus={true}
