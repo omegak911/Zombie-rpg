@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { characterConfigs, movementConfigs } from '../../configs/config';
 import './CharacterModel.css';
+import { start } from 'pretty-error';
 
 const { player } = characterConfigs;
 
@@ -207,11 +208,15 @@ class CharacterModel extends Component {
 
     if (baseMatrix[y][x] !== 'worldmap') {
       if (baseMatrix[y][x] === checkingFor) {
-        console.log('collision');
-   
+        console.log('collision incoming position');
+        baseMatrix[startY][startX] = 1;
+      } else if (baseMatrix[startY][startX] === checkingFor) {
+        console.log('collision prev position');
+        baseMatrix[y][x] = type;
+      } else {
+        baseMatrix[startY][startX] = 1;
+        baseMatrix[y][x] = type;
       }
-      baseMatrix[startY][startX] = 1;
-      baseMatrix[y][x] = type;
     }
   }
 
