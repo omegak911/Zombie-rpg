@@ -10,7 +10,7 @@ const ConfirmTravel = (props) => {
     if (value) {
       history.push('/' + selectedDestination);
     }
-    toggleConfirmTravel(null, null);
+    toggleConfirmTravel(null);
   }
 
   return (

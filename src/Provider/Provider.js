@@ -93,7 +93,7 @@ class Provider extends Component {
     this.setState({ nextBuildingAvailable });
   }
 
-  toggleConfirmTravel = (selectedDestination, level) => {
+  toggleConfirmTravel = (selectedDestination, level = this.state.selectedDestinationLevel) => {
     this.setState({ selectedDestination, selectedDestinationLevel: level });
   }
 
@@ -154,6 +154,12 @@ class Provider extends Component {
     //we'll need to configure this to work with merchants, armory, etc
   }
 
+  initiateCombat = (monsterStats) => {
+    console.log(monsterStats);
+    //setState with monsterStat info, which will be passed down to combat page for monster
+    //push location to /combat
+  }
+
   saveGame = () => {
     //in react native, we will use asyncStorage
     //let's use localStorage for webVersion for now.  We can also use an actual DB if needed
@@ -188,6 +194,7 @@ class Provider extends Component {
           toggleConfirmTravel: this.toggleConfirmTravel,
           history: this.props.history,
           baseProgressUpdatedFalse: this.baseProgressUpdatedFalse,
+          initiateCombat: this.initiateCombat,
         }}>
         {this.props.children}
       </Context.Provider>

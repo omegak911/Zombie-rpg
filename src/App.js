@@ -114,6 +114,7 @@ class App extends Component {
                     autoScroll={this.autoScroll}
                     centerInitialViewOnPlayer={this.centerInitialViewOnPlayer}
                     level={provider.state.selectedDestinationLevel}
+                    initateCombat={provider.initateCombat}
                   />
                 }
                 </Context.Consumer>
