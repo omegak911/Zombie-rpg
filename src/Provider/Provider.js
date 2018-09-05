@@ -51,6 +51,8 @@ class Provider extends Component {
       },
       selectedDestination: null,
       selectedDestinationLevel: null,
+      preCombatSnapshot: false,
+      selectedMonsterIndex: null
     }
   }
 
@@ -154,10 +156,37 @@ class Provider extends Component {
     //we'll need to configure this to work with merchants, armory, etc
   }
 
-  initiateCombat = (monsterStats) => {
-    console.log(monsterStats);
+  initiateCombat = (buildings, selectedMonsterIndex, monsters, trees) => {
+    let { preCombatSnapshot } = this.state;
+    //set throttle so only one battle at a time
+    console.log(monsters);
     //setState with monsterStat info, which will be passed down to combat page for monster
     //push location to /combat
+    if (!preCombatSnapshot) {
+      let preCombat = {
+        monsters: [...monsters],
+        entrance: [],
+        trees: [],
+        buildings: [],
+      }
+      this.setState({ selectedMonsterIndex, preCombatSnapshot: preCombat });
+    }
+
+  }
+  //initiateCombat will setState and trigger page change.  With monster/player data
+
+  resolveCombat = (result) => {
+  //upon resolution of duel
+    //win: resolveCombat will receive true value.  
+      //selectedMonsterIndex will be spliced out of preCombatSnapshot
+      //player will be redirected back to level.  Assuming, the selectedDestinationLevel is unchanged
+      //Level.js will not render new info and instead will render provided precombat info
+    //lose: half coin and return to base
+  //this.clearPreCombatInfo();
+  }
+
+  clearPreCombatInfo = () => {
+    this.setState({ preCombatSnapshot: false, selectedMonsterIndex: null });
   }
 
   saveGame = () => {

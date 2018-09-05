@@ -43,9 +43,10 @@ class Level extends Component {
     this.props.autoScroll(level);
   }
 
-  initiateCombat = (monsterIndex, stats) => {
-    // this.props.initiateCombat(monsterIndex, stats, numberOfEnemies);  --if monster killed, splice it out
-    console.log(monsterIndex, stats)
+  initiateCombat = (monsterIndex) => {
+    let { buildings, numberOfEnemies, trees } = this.state;
+    console.log(this.state)
+    this.props.initiateCombat(buildings, monsterIndex, numberOfEnemies, trees);
   }
 
   spawnStructures = async (temp) => {
@@ -206,7 +207,7 @@ class Level extends Component {
                 startLeft={playerEntrance[1] * 40}
                 startColumn={playerEntrance[1]}
                 startRow={playerEntrance[0]}
-                initiateCombat={provider.initiateCombat}
+                initiateCombat={this.initiateCombat}
                 />
             }
           </Context.Consumer>

@@ -1,0 +1,30 @@
+.combatMap {
+  grid-template-areas:           
+    "monsterHealth space monsterName"
+    "monsterName space monsterSprite"
+    "space space space"
+    "space space space"
+    "space space space"
+    "sprite space name"
+    "sprite space health"
+}
+
+.monsterHealth {
+  grid-area: monsterHealth;
+}
+.monsterName {
+  grid-area: monsterName;
+}
+.monsterName {
+  grid-area: monsterName;
+}
+
+.name {
+  grid-area: name;
+}
+.health {
+  grid-area: health;
+}
+.sprite {
+  grid-area: sprite;
+}

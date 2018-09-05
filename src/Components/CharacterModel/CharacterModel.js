@@ -188,7 +188,7 @@ class CharacterModel extends Component {
 
   checkCollisionMarkPosition = (y,x) => {
     let { type, baseMatrix } = this.props;
-    let { startX, startY, stats } = this.state;
+    let { startX, startY } = this.state;
     let nextVal = baseMatrix[y][x];
     let prevVal = baseMatrix[startY][startX];
   
@@ -200,13 +200,13 @@ class CharacterModel extends Component {
       console.log('incoming collision');
       let monsterType = type === 'player' ? nextVal : type;
       let monsterIndex = monsterType.split('|')[1];
-      this.props.initiateCombat(monsterIndex, stats);
+      this.props.initiateCombat(monsterIndex);
     }
     if ((type === 'player' && prevVal[0] === 'm') || (type[0] === 'm' && prevVal === 'player')) {
       console.log('prior collision');
       let monsterType = type === 'player' ? prevVal : type;
       let monsterIndex = monsterType.split('|')[1];
-      this.props.initiateCombat(monsterIndex, stats);
+      this.props.initiateCombat(monsterIndex);
     }
   
     if (nextVal !== 'worldmap' && nextVal !== 'player') {
