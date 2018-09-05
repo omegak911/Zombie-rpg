@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import { characterConfigs, movementConfigs } from '../../configs/config';
 import './CharacterModel.css';
-import { start } from 'pretty-error';
 
 const { player } = characterConfigs;
 
@@ -50,26 +49,7 @@ class CharacterModel extends Component {
       window.addEventListener('keydown', this.handleKeyPress);
     } else {
       let { startX, startY, top, left } = this.props.startCoord;
-      let { characterType, level } = this.props;
-      let  stats = characterConfigs[characterType].stats;
-      let totalStatPoints = 5 * (level - 1);
-
-      for (let stat in stats) {
-        if (stat === 'exp') {
-          stats[stat] = stats[stat] * level;
-        } else if (stat === 'health') {
-          stats[stat] += (totalStatPoints*5);
-        } else {
-          let randomStatPoints = Math.floor(Math.random() * totalStatPoints);
-          stats[stat] += randomStatPoints;
-          totalStatPoints -= randomStatPoints;
-        }
-      }
-
-      // if (baseMatrix[startY][startX]) { //if they didn't spawn on a building
-      //   baseMatrix[startY][startX] = 'monster'
-      // }
-
+      let { stats } = this.props;
       this.setState({ startX, startY, top, left, stats });
 
       let randomSpeed = 500 + Math.random() * 1500;
@@ -92,11 +72,10 @@ class CharacterModel extends Component {
     if (this.interval) {
       clearInterval(this.interval);
     }
-    console.log(this.state)
   }
 
   checkDirectionValidity = (direction) => {
-    const { baseMatrix, characterType, toggleConfirmTravel, type } = this.props;
+    const { baseMatrix, characterType, toggleConfirmTravel } = this.props;
     const [ x, y, directionIndex, facingCoord ] = this.directionConverter(direction);
     if (x >= 0 && y >= 0 && y < baseMatrix.length && x < baseMatrix[0].length) {
       let val = baseMatrix[y][x];
@@ -209,17 +188,25 @@ class CharacterModel extends Component {
 
   checkCollisionMarkPosition = (y,x) => {
     let { type, baseMatrix } = this.props;
-    let { startX, startY } = this.state;
-    let checkingFor = type === 'player' ? 'monster' : 'player';
+    let { startX, startY, stats } = this.state;
     let nextVal = baseMatrix[y][x];
     let prevVal = baseMatrix[startY][startX];
   
     if (nextVal === 'worldmap' && prevVal === 'worldmap') {
       return;
     }
-    if (type === 'player') {
-      nextVal = nextVal[0] === 'm' ? 'monster' : nextVal;
-      prevVal = prevVal[0] === 'm' ? 'monster' : prevVal;
+
+    if ((type === 'player' && nextVal[0] === 'm') || (type[0] === 'm' && nextVal === 'player')) {
+      console.log('incoming collision');
+      let monsterType = type === 'player' ? nextVal : type;
+      let monsterIndex = monsterType.split('|')[1];
+      this.props.initiateCombat(monsterIndex, stats);
+    }
+    if ((type === 'player' && prevVal[0] === 'm') || (type[0] === 'm' && prevVal === 'player')) {
+      console.log('prior collision');
+      let monsterType = type === 'player' ? prevVal : type;
+      let monsterIndex = monsterType.split('|')[1];
+      this.props.initiateCombat(monsterIndex, stats);
     }
   
     if (nextVal !== 'worldmap' && nextVal !== 'player') {
@@ -229,22 +216,7 @@ class CharacterModel extends Component {
     if ((type[0] === 'm' && prevVal !== 'worldmap' && prevVal !== 'player') || (type === 'player' && prevVal !== 'worldmap')) {
       baseMatrix[startY][startX] = 1;
     }
-  
-    if (nextVal === checkingFor){
-      console.log('incoming collision');
-      let monsterType = type === 'player' ? prevVal : type;
-      let monsterIndex = monsterType.split('|')[1];
-      console.log(monsterIndex)
-      // this.props.initiateCombat(monsterIndex);
-    } 
-  
-    if (prevVal === checkingFor) {
-      console.log('prior collision');
-      let monsterType = type === 'player' ? prevVal : type;
-      let monsterIndex = monsterType.split('|')[1];
-      console.log(monsterIndex)
-      // this.props.initiateCombat(monsterIndex);
-    }
+
   }
 
   render() {
