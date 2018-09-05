@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CharacterModel from '../../Components/CharacterModel/CharacterModel';
 
 import Context from '../../Provider/Context';
-import { levelConfigs, mapConfigs } from '../../configs/config';
+import { characterConfigs, levelConfigs, mapConfigs } from '../../configs/config';
 import './Level.css'
 class Level extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class Level extends Component {
       playerEntrance: [0,0],
       buildings: [],
       trees: [],
-      numberOfEnemies: new Array(10 + Math.floor(Math.random() * 20)).fill(1),
+      numberOfEnemies: null,
       monsters: ['Lil Zom', 'Zom', 'Red Eyes White Skull', 'Skeleton', 'War Zom', 'Brute Zom'],
       mapUpdated: false,
     }
@@ -26,6 +26,7 @@ class Level extends Component {
 
     await this.assignEntrance();
     await this.spawnStructures(temp); //randomly placed buildings (temp)
+    await this.spawnZombies();
     await this.props.centerInitialViewOnPlayer(level);
   }
 
@@ -40,6 +41,11 @@ class Level extends Component {
   autoScroll = () => {
     const level = document.getElementById('level');
     this.props.autoScroll(level);
+  }
+
+  initiateCombat = (monsterIndex, stats) => {
+    // this.props.initiateCombat(monsterIndex, stats, numberOfEnemies);  --if monster killed, splice it out
+    console.log(monsterIndex, stats)
   }
 
   spawnStructures = async (temp) => {
@@ -74,23 +80,52 @@ class Level extends Component {
         trees.push([...possibleTreeLocations[i], randomTreeImage]);
       }
     }
-    await this.setState({ buildings, trees, levelMatrix: temp, mapUpdated: true });
+    await this.setState({ buildings, trees, levelMatrix: temp });
   }
   
   spawnZombies = () => {
-    // randomly generated number of zombies 5-20
-    // random 20% chance for 1-2 dead soldiers with loot
-    // if zombies are still in the area, there's a 50% chance of running into a zombie when trying to escape
-    // if they defeat that zombie, they have to can try to escape again with that 50%
-    
-    
-    // zombie level will be associated with the one clicked
-    // randomly assign exit | probably have an array of arrays with coordinates of possible exits with Math.random index
-    //randomly pick row/column (20x20).  Cooresponding top/left will be x40
+    let { level } = this.props;
+    let { monsters } = this.state;
+    let randomNumMonsters = 10 + Math.floor(Math.random() * 20);
+
+    let totalMonsters = []
+    for (let i = 0; i < randomNumMonsters; i++) {
+      let allowedIndexes = Math.floor(level/5);
+      let randomIndex = Math.floor(Math.random() * allowedIndexes);
+      let monster = {
+        name: monsters[randomIndex],
+        randomStartY: 1 + Math.floor(Math.random() * 18),
+        randomStartX: 1 + Math.floor(Math.random() * 18)
+      }
+      monster.stats = this.createRandomStats(level, monster.name, i);
+      totalMonsters.push(monster);
+    }
+    this.setState({ numberOfEnemies: totalMonsters, mapUpdated: true })
+  }
+
+  createRandomStats = (level, characterType, index) => {
+    let stats = {...characterConfigs[characterType].stats};
+    let totalStatPoints = 5 * (level - 1);
+
+    for (let i = 0; i < 3; i++) {
+      let randomStatPoints = Math.floor(Math.random() * totalStatPoints);
+      totalStatPoints -= randomStatPoints;
+      if (i === 0) {
+        stats.attack += randomStatPoints;
+      }
+      if (i === 1) {
+        stats.defense += randomStatPoints;
+      }
+      if (i === 2) {
+        stats.health += (randomStatPoints * 5)
+      }
+    }
+    stats.exp *= level;
+    return stats;
   }
 
   render() {
-    let { blockedEntrances, levelMatrix, mapUpdated, monsters, numberOfEnemies, playerEntrance, buildings, trees } = this.state;
+    let { blockedEntrances, levelMatrix, mapUpdated, numberOfEnemies, playerEntrance, buildings, trees } = this.state;
     let { level } = this.props;
     return (
       <div id="level" className="page">
@@ -171,40 +206,24 @@ class Level extends Component {
                 startLeft={playerEntrance[1] * 40}
                 startColumn={playerEntrance[1]}
                 startRow={playerEntrance[0]}
+                initiateCombat={provider.initiateCombat}
                 />
             }
           </Context.Consumer>
         }
-        {mapUpdated && numberOfEnemies.map((num,i) => {
-          let allowedIndexes = 0;
-          if (level > 4) {
-            allowedIndexes += 1;
-          }
-          if (level > 9) {
-            allowedIndexes += 1;
-          }
-          if (level > 14) {
-            allowedIndexes += 1;
-          }
-          if (level > 19) {
-            allowedIndexes += 1;
-          }
-          let randomIndex = Math.floor(Math.random() * allowedIndexes);
-          let monster = monsters[randomIndex];
-          let randomStartX = 1 + Math.floor(Math.random() * 18);
-          let randomStartY = 1 + Math.floor(Math.random() * 18);
-
-          return (
-            <CharacterModel 
-              baseMatrix={levelMatrix} 
-              characterType={monster}
-              type={`monster|${i}`}
-              index={i}
-              key={i}
-              level={level} 
-              startCoord={{ startX: randomStartX, startY: randomStartY, top: randomStartY * 40, left: randomStartX * 40 }}
-            />
-        )})}
+        {mapUpdated && numberOfEnemies.map(({ name, randomStartX, randomStartY, stats},i) => 
+          <CharacterModel 
+            baseMatrix={levelMatrix} 
+            characterType={name}
+            type={`monster|${i}`}
+            index={i}
+            initiateCombat={this.initiateCombat}
+            key={i}
+            level={level} 
+            stats={stats}
+            startCoord={{ startX: randomStartX, startY: randomStartY, top: randomStartY * 40, left: randomStartX * 40 }}
+          />
+        )}
         </div>
       </div>
     )
