@@ -213,7 +213,7 @@ class CharacterModel extends Component {
     let checkingFor = type === 'player' ? 'monster' : 'player';
     let nextVal = baseMatrix[y][x];
     let prevVal = baseMatrix[startY][startX];
-
+  
     if (nextVal === 'worldmap' && prevVal === 'worldmap') {
       return;
     }
@@ -221,19 +221,29 @@ class CharacterModel extends Component {
       nextVal = nextVal[0] === 'm' ? 'monster' : nextVal;
       prevVal = prevVal[0] === 'm' ? 'monster' : prevVal;
     }
-    if (nextVal !== 'worldmap') {
-      if (nextVal === checkingFor) {
-        console.log('collision incoming position');
-        //send type and && baseMatrix[y][x] to provider func and change page
-        baseMatrix[startY][startX] = 1;
-      } else if (prevVal === checkingFor) {
-        console.log('collision prev position');
-        //send type and && baseMatrix[startY][startX] to provider func and change page
-        baseMatrix[y][x] = type;
-      } else if (prevVal !== 'worldmap'){
-        baseMatrix[startY][startX] = 1;
-        baseMatrix[y][x] = type;
-      }
+  
+    if (nextVal !== 'worldmap' && nextVal !== 'player') {
+      baseMatrix[y][x] = type;
+    }
+    
+    if ((type[0] === 'm' && prevVal !== 'worldmap' && prevVal !== 'player') || (type === 'player' && prevVal !== 'worldmap')) {
+      baseMatrix[startY][startX] = 1;
+    }
+  
+    if (nextVal === checkingFor){
+      console.log('incoming collision');
+      let monsterType = type === 'player' ? prevVal : type;
+      let monsterIndex = monsterType.split('|')[1];
+      console.log(monsterIndex)
+      // this.props.initiateCombat(monsterIndex);
+    } 
+  
+    if (prevVal === checkingFor) {
+      console.log('prior collision');
+      let monsterType = type === 'player' ? prevVal : type;
+      let monsterIndex = monsterType.split('|')[1];
+      console.log(monsterIndex)
+      // this.props.initiateCombat(monsterIndex);
     }
   }
 
